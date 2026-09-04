@@ -35,7 +35,7 @@ type ProgramStatus = 'open' | 'upcoming' | 'closed' | 'unknown';
 
 const tierOptions = ['985', '211', '双一流', '科研院所', '普通高校'];
 const directionOptions = ['基础心理', '发展教育', '应用心理', '临床咨询', '认知神经', '心理统计', '工程心理', '社会心理'];
-const provinceOptions = ['北京', '上海', '天津', '重庆', '浙江', '江苏', '福建', '山东', '湖北', '湖南', '广东', '四川', '陕西', '吉林', '江西', '河南'];
+const provinceOptions = ['北京', '上海', '天津', '重庆', '浙江', '江苏', '福建', '山东', '湖北', '湖南', '广东', '四川', '陕西', '吉林', '黑龙江', '江西', '河南', '宁夏', '西藏', '新疆'];
 const degreeOptions: DegreeType[] = ['学术型硕士', '应用心理专硕', '心理健康教育', '直博'];
 const statusOptions: { value: ProgramStatus; label: string }[] = [
   { value: 'open', label: '报名中' },
