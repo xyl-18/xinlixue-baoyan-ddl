@@ -1,21 +1,73 @@
-export type DataSource = 'pre2027' | 'camp2027' | 'archive2026';
+export type DataSource = 'pre2027';
 export type ProgramType = '夏令营' | '预推免' | '推免接收' | '直博选拔';
 export type DegreeType = '学术型硕士' | '应用心理专硕' | '心理健康教育' | '直博';
 export type DeadlinePrecision = 'minute' | 'day' | 'unknown';
+export type VerificationLevel = 'college_notice' | 'school_notice' | 'official_system' | 'watchlist';
+export type DeadlineKind = '网申截止' | '材料截止' | '考核时间';
+
+export type DeadlineItem = {
+  kind: DeadlineKind;
+  label: string;
+  at: string | null;
+};
 
 export type Program = {
   id: string; source: DataSource; school: string; institute: string; title: string;
   type: ProgramType; tiers: string[]; province: string; degrees: DegreeType[]; directions: string[];
   openAt: string | null; deadline: string | null; deadlinePrecision: DeadlinePrecision; eventDates: string;
-  description: string; requirements: string[]; sourceUrl: string | null; verifiedAt: string; demo: boolean;
+  description: string; requirements: string[]; sourceUrl: string | null; verifiedAt: string;
+  verificationLevel: VerificationLevel; deadlines: DeadlineItem[];
 };
 
 export const sourceLabels: Record<DataSource, string> = {
-  pre2027: '2027 预推免', camp2027: '2027 夏令营', archive2026: '2026 历史数据',
+  pre2027: '2027 预推免',
 };
 
-type CurrentSeed = Omit<Program, 'source' | 'verifiedAt' | 'demo'>;
-const current = (program: CurrentSeed): Program => ({ ...program, source: 'pre2027', verifiedAt: '2026-09-04', demo: false });
+type CurrentSeed = Omit<Program, 'source' | 'verifiedAt' | 'verificationLevel' | 'deadlines'>;
+
+const collegeNoticeIds = new Set([
+  'pku-2027', 'tsinghua-2027', 'ruc-2027', 'muc-2027', 'ecnu-2027', 'tongji-2027',
+  'whu-2027', 'ccnu-2027', 'xmu-2027', 'nankai-2027', 'cas-psych-2027',
+]);
+const officialSystemIds = new Set(['zju-2027', 'nnu-2027', 'scnu-2027', 'nenu-2027']);
+
+const instituteNames: Record<string, string> = {
+  'bjfu-2027': '人文社会科学学院',
+  'cupl-2027': '社会学院',
+  'cug-2027': '马克思主义学院',
+  'cugb-2027': '马克思主义学院',
+  'hhu-2027': '公共管理学院',
+  'jnu-2027': '管理学院',
+  'nwu-2027': '公共管理学院',
+  'hrbeu-2027': '人文社会科学学院',
+  'fzu-2027': '人文社会科学学院',
+  'utibet-2027': '教育学院',
+  'shzu-2027': '师范学院',
+};
+
+const excludedInferredIds = new Set(['cqu-2027', 'csu-2027', 'nxu-2027', 'tmu-2027', 'smmu-2027']);
+
+function verificationFor(program: CurrentSeed): VerificationLevel {
+  if (collegeNoticeIds.has(program.id)) return 'college_notice';
+  if (officialSystemIds.has(program.id)) return 'official_system';
+  if (program.title.includes('待')) return 'watchlist';
+  return 'school_notice';
+}
+
+function deadlinesFor(program: CurrentSeed): DeadlineItem[] {
+  const items: DeadlineItem[] = program.deadline ? [{ kind: '网申截止', label: '主要报名截止', at: program.deadline }] : [];
+  if (program.id === 'pku-2027') items.push({ kind: '材料截止', label: '纸质材料送达', at: '2026-09-08T17:00:00+08:00' });
+  return items;
+}
+
+const current = (program: CurrentSeed): Program => ({
+  ...program,
+  institute: instituteNames[program.id] ?? program.institute,
+  source: 'pre2027',
+  verifiedAt: '2026-09-04',
+  verificationLevel: verificationFor(program),
+  deadlines: deadlinesFor(program),
+});
 const pending = '截至 2026-09-04，已确认该校设有心理学相关研究生培养项目，但未检索到院系公布的 2027 届明确截止时刻。本站不使用往年日期代替，请持续查看官方入口。';
 
 export const programs: Program[] = [
@@ -69,7 +121,4 @@ export const programs: Program[] = [
   current({ id: 'utibet-2027', school: '西藏大学', institute: '教育学院教育心理学专业', title: '2027 年推免接收信息（待学校公布）', type: '推免接收', tiers: ['211', '双一流'], province: '西藏', degrees: ['学术型硕士', '应用心理专硕'], directions: ['发展教育', '临床咨询', '认知神经'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注西藏大学研究生招生栏目', '最终专业与学习方式以 2027 目录为准'], sourceUrl: 'https://yjszs.utibet.edu.cn/' }),
   current({ id: 'shzu-2027', school: '石河子大学', institute: '师范学院应用心理专业', title: '2027 年推免接收信息（待学校公布）', type: '推免接收', tiers: ['211', '双一流'], province: '新疆', degrees: ['应用心理专硕'], directions: ['应用心理', '发展教育'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注石河子大学研究生招生信息网', '最终专业以 2027 招生目录为准'], sourceUrl: 'https://yz.shzu.edu.cn/' }),
   current({ id: 'cas-psych-2027', school: '中国科学院大学', institute: '中国科学院心理研究所', title: '2027 年招收推免硕士研究生（直博生）', type: '推免接收', tiers: ['科研院所', '双一流'], province: '北京', degrees: ['学术型硕士', '应用心理专硕', '直博'], directions: ['基础心理', '认知神经', '发展教育', '社会心理', '工程心理'], openAt: '2026-08-25T00:00:00+08:00', deadline: '2026-09-02T16:00:00+08:00', deadlinePrecision: 'minute', eventDates: '预计 2026 年 9 月 22—23 日考核', description: '作为 985/211 范围外的重要心理学科研院所补充收录。问卷、国科大系统及电子材料均须按通知完成。', requirements: ['须取得推免资格', '9 月 2 日 16:00 前完成问卷并提交材料', '申请前与拟报考导师沟通'], sourceUrl: 'https://psych.cas.cn/edu/zsxx/sszs/202608/t20260825_8265209.html' }),
-  { id: 'demo-bnu-camp', source: 'camp2027', school: '北京师范大学', institute: '心理学部', title: '2026 年优秀大学生夏令营（演示）', type: '夏令营', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['学术型硕士', '直博'], directions: ['基础心理', '发展教育'], openAt: '2026-05-20T09:00:00+08:00', deadline: '2026-06-12T17:00:00+08:00', deadlinePrecision: 'minute', eventDates: '2026 年 7 月（演示）', description: '历史演示条目，不代表真实通知。', requirements: ['面向 2027 届本科生（演示）'], sourceUrl: null, verifiedAt: '2026-06-12', demo: true },
-  { id: 'demo-ecnu-camp', source: 'camp2027', school: '华东师范大学', institute: '心理与认知科学学院', title: '2026 年优秀大学生夏令营（演示）', type: '夏令营', tiers: ['985', '211', '双一流'], province: '上海', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理', '临床咨询'], openAt: '2026-05-18T09:00:00+08:00', deadline: '2026-06-16T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '2026 年 7 月（演示）', description: '历史演示条目，不代表真实通知。', requirements: ['面向 2027 届本科生（演示）'], sourceUrl: null, verifiedAt: '2026-06-16', demo: true },
-  { id: 'demo-bnu-archive', source: 'archive2026', school: '北京师范大学', institute: '心理学部', title: '2025 年推免接收（历史演示）', type: '推免接收', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['学术型硕士', '直博'], directions: ['基础心理', '发展教育'], openAt: '2025-08-25T09:00:00+08:00', deadline: '2025-09-10T17:00:00+08:00', deadlinePrecision: 'minute', eventDates: '已结束', description: '用于验证历史数据源切换。', requirements: ['历史演示条目'], sourceUrl: null, verifiedAt: '2025-09-10', demo: true },
-];
+].filter((program) => !excludedInferredIds.has(program.id));

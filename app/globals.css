@@ -134,6 +134,10 @@
 @layer components {
   .countdown { @apply inline-flex items-center gap-1.5 text-sm font-bold tabular-nums; }
   .countdown svg { @apply size-3.5; }
+  .mini-tag { @apply inline-flex items-center gap-1 rounded-md border bg-background px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground; }
+  .mini-tag svg { @apply size-2.5; }
+  .filter-chip { @apply inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground transition hover:bg-accent; }
+  .filter-chip svg { @apply size-3; }
   .countdown-urgent { color: oklch(0.57 0.21 27); }
   .countdown-soon { color: oklch(0.62 0.16 64); }
   .countdown-normal { color: oklch(0.52 0.13 222); }
