@@ -16,7 +16,8 @@ type ProgramStatus = 'open' | 'upcoming' | 'closed' | 'unknown';
 type SourceMode = 'college' | 'all' | 'watchlist';
 
 const tierOptions = ['985', '211', '双一流', '科研院所', '普通高校'];
-const directionOptions = ['基础心理', '发展教育', '应用心理', '临床咨询', '认知神经', '心理统计', '工程心理', '社会心理'];
+// 方向选项直接由院系数据生成，避免筛选标签与数据表中的专业方向脱节。
+const directionOptions = Array.from(new Set(programs.flatMap((program) => program.directions))).sort((a, b) => a.localeCompare(b, 'zh-CN'));
 const provinceOptions = ['北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆'];
 const degreeOptions: DegreeType[] = ['学术型硕士', '应用心理专硕', '心理健康教育', '直博'];
 const verificationOptions: VerificationLevel[] = ['college_notice', 'official_system', 'school_notice', 'watchlist'];
@@ -41,7 +42,7 @@ const initialClock = new Date('2026-09-04T00:00:00+08:00').getTime();
 export default function Home() {
   const [now, setNow] = useState(initialClock);
   const [view, setView] = useState<ViewMode>('list');
-  const [sourceMode, setSourceMode] = useState<SourceMode>('college');
+  const [sourceMode, setSourceMode] = useState<SourceMode>('all');
   const [scope, setScope] = useState<TimeScope>('all');
   const [query, setQuery] = useState('');
   const [tiers, setTiers] = useState<string[]>([]);
@@ -244,7 +245,7 @@ function FilterPanel(props: { rows: Program[]; now: number; tiers: string[]; set
     <FilterGroup className="mt-7" title="院校类型" options={tierOptions} selected={props.tiers} onChange={props.setTiers} count={(value) => rows.filter((row) => row.tiers.includes(value)).length} />
     <FilterGroup className="mt-7" title="状态" options={statusOptions} labels={Object.fromEntries(statusOptions.map((item) => [item, statusMeta[item].label]))} selected={props.statuses} onChange={props.setStatuses} count={(value) => rows.filter((row) => getStatus(row, now) === value).length} />
     <FilterGroup className="mt-7" title="培养类型" options={degreeOptions} selected={props.degrees} onChange={props.setDegrees} count={(value) => rows.filter((row) => row.degrees.includes(value as DegreeType)).length} />
-    <FilterGroup className="mt-7" title="专业方向" options={directionOptions} selected={props.directions} onChange={props.setDirections} count={(value) => rows.filter((row) => row.directions.includes(value)).length} />
+    <FilterGroup className="mt-7" title="专业方向（含专业目录）" options={directionOptions} selected={props.directions} onChange={props.setDirections} count={(value) => rows.filter((row) => row.directions.includes(value)).length} />
     <FilterGroup className="mt-7" title="地区（31省区市）" options={provinceOptions} selected={props.provinces} onChange={props.setProvinces} count={(value) => rows.filter((row) => row.province === value).length} />
   </div>;
 }
@@ -255,7 +256,7 @@ function FilterGroup<T extends string>({ title, options, labels, selected, onCha
 
 function ProgramDetail({ program, now, onClose }: { program: Program | null; now: number; onClose: () => void }) {
   const remaining = program ? countdownParts(program, now) : null;
-  return <OverlayPanel open={Boolean(program)} side="right" title={program?.school ?? ''} description={program ? `${program.institute} · ${program.title}` : ''} onClose={onClose} width="sm:max-w-xl" hideDefaultHeader footer={program && <div className="grid gap-2"><div className="flex justify-end">{program.sourceUrl ? <Button onClick={() => window.open(program.sourceUrl!, '_blank', 'noopener,noreferrer')}><ExternalLink />{program.verificationLevel === 'college_notice' ? '查看学院通知' : program.verificationLevel === 'watchlist' ? '打开官方跟踪入口' : '查看官方来源'}</Button> : <Button disabled><ExternalLink />暂无来源</Button>}</div><p className="text-center text-[11px] text-muted-foreground">最近核验：{program.verifiedAt}</p></div>}>
+  return <OverlayPanel open={Boolean(program)} side="right" title={program?.school ?? ''} description={program ? `${program.institute} · ${program.title}` : ''} onClose={onClose} width="sm:max-w-xl" hideDefaultHeader footer={program && <div className="grid gap-2"><div className="grid grid-cols-1 gap-2 sm:grid-cols-2">{program.sourceUrl ? <Button variant="outline" onClick={() => window.open(program.sourceUrl!, '_blank', 'noopener,noreferrer')}><ExternalLink />查看通知</Button> : <Button variant="outline" disabled><ExternalLink />通知待补</Button>}{program.applicationUrl ? <Button onClick={() => window.open(program.applicationUrl!, '_blank', 'noopener,noreferrer')}><Link2 />报名入口</Button> : <Button disabled><Link2 />报名入口待开放</Button>}</div><p className="text-center text-[11px] text-muted-foreground">最近核验：{program.verifiedAt} · 报名前请以学院通知为准</p></div>}>
     {program && <><div className="border-b p-5 pr-14"><div className="mb-3 flex flex-wrap gap-2"><Badge variant="outline" className={statusMeta[getStatus(program, now)].tone}>{statusMeta[getStatus(program, now)].label}</Badge><Badge variant="outline" className={verificationMeta[program.verificationLevel].tone}>{verificationMeta[program.verificationLevel].label}</Badge><Badge variant="secondary">{program.type}</Badge></div><h2 className="text-xl font-bold leading-tight">{program.school}</h2><p className="mt-1 text-base font-semibold text-primary">{program.institute}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{program.title}</p></div>
       <div className="space-y-6 px-5 py-5"><div className="rounded-2xl bg-primary p-5 text-primary-foreground"><p className="text-xs text-primary-foreground/70">{program.deadline ? '距离主要截止' : '当前状态'}</p>{remaining ? <div className="mt-3 grid grid-cols-4 gap-2">{remaining.map(([value, label]) => <div key={label} className="rounded-xl bg-white/10 p-2 text-center"><p className="text-xl font-black tabular-nums">{value}</p><p className="text-[10px] text-primary-foreground/70">{label}</p></div>)}</div> : <p className="mt-2 text-2xl font-bold">日期尚未公布</p>}<p className="mt-3 text-sm text-primary-foreground/80">{formatDeadline(program, true)}</p>{program.deadline && <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-white/85" style={{ width: `${deadlineProgress(program, now)}%` }} /></div>}</div>
         <DetailSection title="招生单位"><DetailRow icon={<Building2 />} label="学院" value={program.institute} /><DetailRow icon={<MapPin />} label="地区" value={program.province} /><DetailRow icon={<GraduationCap />} label="培养类型" value={program.degrees.join('、')} /><DetailRow icon={<Link2 />} label="来源层级" value={verificationMeta[program.verificationLevel].label} /></DetailSection>

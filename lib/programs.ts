@@ -15,7 +15,7 @@ export type Program = {
   id: string; source: DataSource; school: string; institute: string; title: string;
   type: ProgramType; tiers: string[]; province: string; degrees: DegreeType[]; directions: string[];
   openAt: string | null; deadline: string | null; deadlinePrecision: DeadlinePrecision; eventDates: string;
-  description: string; requirements: string[]; sourceUrl: string | null; verifiedAt: string;
+  description: string; requirements: string[]; sourceUrl: string | null; applicationUrl: string | null; verifiedAt: string;
   verificationLevel: VerificationLevel; deadlines: DeadlineItem[];
 };
 
@@ -23,7 +23,7 @@ export const sourceLabels: Record<DataSource, string> = {
   pre2027: '2027 预推免',
 };
 
-type CurrentSeed = Omit<Program, 'source' | 'verifiedAt' | 'verificationLevel' | 'deadlines'>;
+type CurrentSeed = Omit<Program, 'source' | 'applicationUrl' | 'verifiedAt' | 'verificationLevel' | 'deadlines'>;
 
 const collegeNoticeIds = new Set([
   'pku-2027', 'tsinghua-2027', 'ruc-2027', 'muc-2027', 'ecnu-2027', 'tongji-2027',
@@ -45,6 +45,18 @@ const instituteNames: Record<string, string> = {
   'shzu-2027': '师范学院',
 };
 
+const applicationLinks: Record<string, string> = {
+  'pku-2027': 'https://admission.pku.edu.cn/',
+  'tsinghua-2027': 'https://yz.tsinghua.edu.cn/',
+  'bnu-2027': 'https://yz.bnu.edu.cn/',
+  'zju-2027': 'https://yjsy.zju.edu.cn/open/zsss/ZsssBksmOpenList?nf=2027&bksmlx=2',
+  'nnu-2027': 'https://yz.njnu.edu.cn/sstm/',
+  'scnu-2027': 'https://yanzhao.scnu.edu.cn/MasterTm/OpenTime.aspx',
+  'nenu-2027': 'https://yz.nenu.edu.cn/ybm',
+  'ccnu-2027': 'https://gs.ccnu.edu.cn/',
+  'cas-psych-2027': 'https://admission.ucas.ac.cn/',
+};
+
 const excludedInferredIds = new Set(['cqu-2027', 'csu-2027', 'nxu-2027', 'tmu-2027', 'smmu-2027']);
 
 function verificationFor(program: CurrentSeed): VerificationLevel {
@@ -64,11 +76,54 @@ const current = (program: CurrentSeed): Program => ({
   ...program,
   institute: instituteNames[program.id] ?? program.institute,
   source: 'pre2027',
+  applicationUrl: applicationLinks[program.id] ?? null,
   verifiedAt: '2026-09-04',
   verificationLevel: verificationFor(program),
   deadlines: deadlinesFor(program),
 });
 const pending = '截至 2026-09-04，已确认该校设有心理学相关研究生培养项目，但未检索到院系公布的 2027 届明确截止时刻。本站不使用往年日期代替，请持续查看官方入口。';
+
+type CoverageSeed = Pick<CurrentSeed, 'id' | 'school' | 'institute' | 'tiers' | 'province' | 'degrees' | 'directions' | 'sourceUrl'>;
+const coverage = (item: CoverageSeed) => current({
+  ...item,
+  title: '2027 年推免接收信息（待学院公布）',
+  type: '推免接收',
+  openAt: null,
+  deadline: null,
+  deadlinePrecision: 'unknown',
+  eventDates: '待公布',
+  description: pending,
+  requirements: ['关注该培养单位的招生通知栏目', '报名入口开放后以学院通知与学校系统为准'],
+});
+
+// 覆盖清单：每一条均以独立培养单位建档；未找到学院当年通知的记录进入待跟踪，不填充推测日期。
+const coveragePrograms: Program[] = [
+  coverage({ id: 'jlu-2027', school: '吉林大学', institute: '哲学社会学院心理学相关专业', tiers: ['985', '211', '双一流'], province: '吉林', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理学', '社会心理学'], sourceUrl: 'https://zsb.jlu.edu.cn/' }),
+  coverage({ id: 'hit-2027', school: '哈尔滨工业大学', institute: '人文社科学部心理学相关方向', tiers: ['985', '211', '双一流'], province: '黑龙江', degrees: ['学术型硕士'], directions: ['工程心理', '航空航天心理学', '认知神经科学'], sourceUrl: 'https://yzb.hit.edu.cn/' }),
+  coverage({ id: 'dlut-2027', school: '大连理工大学', institute: '人文与社会科学学部心理学相关专业', tiers: ['985', '211', '双一流'], province: '辽宁', degrees: ['学术型硕士'], directions: ['应用心理学', '工程心理'], sourceUrl: 'https://gs.dlut.edu.cn/' }),
+  coverage({ id: 'neu-2027', school: '东北大学', institute: '人文与社会科学学院心理学相关专业', tiers: ['985', '211', '双一流'], province: '辽宁', degrees: ['学术型硕士'], directions: ['应用心理学', '社会心理学'], sourceUrl: 'https://yz.neu.edu.cn/' }),
+  coverage({ id: 'cau-2027', school: '中国农业大学', institute: '人文与发展学院心理学相关专业', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['学术型硕士'], directions: ['发展与教育心理学', '健康心理学'], sourceUrl: 'https://yz.cau.edu.cn/' }),
+  coverage({ id: 'ouc-2027', school: '中国海洋大学', institute: '基础教学中心心理学相关专业', tiers: ['985', '211', '双一流'], province: '山东', degrees: ['学术型硕士'], directions: ['基础心理学', '应用心理学'], sourceUrl: 'https://yz.ouc.edu.cn/' }),
+  coverage({ id: 'nju-2027', school: '南京大学', institute: '社会学院心理学相关专业', tiers: ['985', '211', '双一流'], province: '江苏', degrees: ['学术型硕士'], directions: ['社会心理学', '应用心理学'], sourceUrl: 'https://grawww.nju.edu.cn/' }),
+  coverage({ id: 'ustc-2027', school: '中国科学技术大学', institute: '人文与社会科学学院认知科学相关方向', tiers: ['985', '211', '双一流'], province: '安徽', degrees: ['学术型硕士', '直博'], directions: ['认知神经科学', '基础心理学'], sourceUrl: 'https://yz.ustc.edu.cn/' }),
+  coverage({ id: 'hust-2027', school: '华中科技大学', institute: '教育科学研究院心理学相关专业', tiers: ['985', '211', '双一流'], province: '湖北', degrees: ['学术型硕士', '应用心理专硕'], directions: ['发展与教育心理学', '应用心理学'], sourceUrl: 'https://gszs.hust.edu.cn/' }),
+  coverage({ id: 'xjtu-2027', school: '西安交通大学', institute: '人文社会科学学院心理学相关专业', tiers: ['985', '211', '双一流'], province: '陕西', degrees: ['学术型硕士'], directions: ['基础心理学', '健康心理学', '认知神经科学'], sourceUrl: 'https://yz.xjtu.edu.cn/' }),
+  coverage({ id: 'nwafu-2027', school: '西北农林科技大学', institute: '人文社会发展学院心理学相关专业', tiers: ['985', '211', '双一流'], province: '陕西', degrees: ['学术型硕士'], directions: ['应用心理学', '发展与教育心理学'], sourceUrl: 'https://yz.nwafu.edu.cn/' }),
+  coverage({ id: 'lzu-2027', school: '兰州大学', institute: '哲学社会学院心理学相关专业', tiers: ['985', '211', '双一流'], province: '甘肃', degrees: ['学术型硕士'], directions: ['基础心理学', '应用心理学'], sourceUrl: 'https://yz.lzu.edu.cn/' }),
+  coverage({ id: 'buct-2027', school: '北京化工大学', institute: '文法学院应用心理相关专业', tiers: ['211', '双一流'], province: '北京', degrees: ['应用心理专硕'], directions: ['应用心理学', '健康心理学'], sourceUrl: 'https://graduate.buct.edu.cn/' }),
+  coverage({ id: 'bupt-2027', school: '北京邮电大学', institute: '人文学院心理学相关方向', tiers: ['211', '双一流'], province: '北京', degrees: ['学术型硕士'], directions: ['工程心理', '认知神经科学'], sourceUrl: 'https://yzb.bupt.edu.cn/' }),
+  coverage({ id: 'bjtu-2027', school: '北京交通大学', institute: '法学院心理学相关专业', tiers: ['211', '双一流'], province: '北京', degrees: ['应用心理专硕'], directions: ['应用心理学', '社会心理学'], sourceUrl: 'https://gs.bjtu.edu.cn/' }),
+  coverage({ id: 'uibe-2027', school: '对外经济贸易大学', institute: '国际关系学院心理学相关专业', tiers: ['211', '双一流'], province: '北京', degrees: ['学术型硕士'], directions: ['社会心理学', '应用心理学'], sourceUrl: 'https://yjsy.uibe.edu.cn/' }),
+  coverage({ id: 'shnu-2027', school: '上海师范大学', institute: '教育学院心理学系', tiers: ['普通高校'], province: '上海', degrees: ['学术型硕士', '应用心理专硕', '心理健康教育'], directions: ['基础心理学', '发展与教育心理学', '应用心理学', '学校心理学'], sourceUrl: 'https://yjsc.shnu.edu.cn/' }),
+  coverage({ id: 'zjnu-2027', school: '浙江师范大学', institute: '教师教育学院心理学相关专业', tiers: ['普通高校'], province: '浙江', degrees: ['学术型硕士', '应用心理专硕', '心理健康教育'], directions: ['发展与教育心理学', '学校心理学', '应用心理学'], sourceUrl: 'https://yzw.zjnu.edu.cn/' }),
+  coverage({ id: 'jxnu-2027', school: '江西师范大学', institute: '心理学院', tiers: ['普通高校'], province: '江西', degrees: ['学术型硕士', '应用心理专硕', '心理健康教育'], directions: ['基础心理学', '发展与教育心理学', '应用心理学', '认知神经科学'], sourceUrl: 'https://yz.jxnu.edu.cn/' }),
+  coverage({ id: 'capitalnu-2027', school: '首都师范大学', institute: '心理学院', tiers: ['双一流'], province: '北京', degrees: ['学术型硕士', '应用心理专硕', '心理健康教育'], directions: ['基础心理学', '发展与教育心理学', '应用心理学', '临床咨询', '认知神经科学'], sourceUrl: 'https://grad.cnu.edu.cn/' }),
+  coverage({ id: 'tianjin-nu-2027', school: '天津师范大学', institute: '心理学部', tiers: ['普通高校'], province: '天津', degrees: ['学术型硕士', '应用心理专硕', '心理健康教育'], directions: ['基础心理学', '发展与教育心理学', '应用心理学', '学校心理学'], sourceUrl: 'https://yjs.tjnu.edu.cn/' }),
+  coverage({ id: 'hebeinu-2027', school: '河北师范大学', institute: '教育学院心理学系', tiers: ['普通高校'], province: '河北', degrees: ['学术型硕士', '应用心理专硕', '心理健康教育'], directions: ['发展与教育心理学', '应用心理学', '学校心理学'], sourceUrl: 'https://yjsy.hebtu.edu.cn/' }),
+  coverage({ id: 'swnu-2027', school: '西北师范大学', institute: '心理学院', tiers: ['普通高校'], province: '甘肃', degrees: ['学术型硕士', '应用心理专硕', '心理健康教育'], directions: ['基础心理学', '发展与教育心理学', '应用心理学', '临床咨询'], sourceUrl: 'https://yjsy.nwnu.edu.cn/' }),
+  coverage({ id: 'henu-2027', school: '河南大学', institute: '教育学部心理学院', tiers: ['双一流'], province: '河南', degrees: ['学术型硕士', '应用心理专硕', '心理健康教育'], directions: ['基础心理学', '发展与教育心理学', '应用心理学', '认知神经科学'], sourceUrl: 'https://grs.henu.edu.cn/' }),
+  coverage({ id: 'scu-psych-2027', school: '四川大学', institute: '华西临床医学院心理卫生中心相关方向', tiers: ['985', '211', '双一流'], province: '四川', degrees: ['学术型硕士'], directions: ['临床认知神经科学', '健康心理学', '认知神经科学'], sourceUrl: 'https://yz.scu.edu.cn/' }),
+];
 
 export const programs: Program[] = [
   current({ id: 'pku-2027', school: '北京大学', institute: '心理与认知科学学院', title: '2027 年推荐免试研究生相关事项说明', type: '直博选拔', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['直博'], directions: ['基础心理', '认知神经', '应用心理'], openAt: null, deadline: '2026-09-08T10:00:00+08:00', deadlinePrecision: 'minute', eventDates: '预计 2026 年 9 月 18 日前后面试', description: '本科起点仅招收直博生。网上报名须在 9 月 8 日 10:00 前完成，纸质材料另须在当日 17:00 前送达。', requirements: ['须获得本科所在学校推免资格', '按系统要求提交申请并寄送或提交完整材料'], sourceUrl: 'https://www.psy.pku.edu.cn/xwzx/tzgg/a353e2b94a004709ab71e0841d95cbe7.htm' }),
@@ -122,4 +177,5 @@ export const programs: Program[] = [
   current({ id: 'utibet-2027', school: '西藏大学', institute: '教育学院教育心理学专业', title: '2027 年推免接收信息（待学校公布）', type: '推免接收', tiers: ['211', '双一流'], province: '西藏', degrees: ['学术型硕士', '应用心理专硕'], directions: ['发展教育', '临床咨询', '认知神经'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注西藏大学研究生招生栏目', '最终专业与学习方式以 2027 目录为准'], sourceUrl: 'https://yjszs.utibet.edu.cn/' }),
   current({ id: 'shzu-2027', school: '石河子大学', institute: '师范学院应用心理专业', title: '2027 年推免接收信息（待学校公布）', type: '推免接收', tiers: ['211', '双一流'], province: '新疆', degrees: ['应用心理专硕'], directions: ['应用心理', '发展教育'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注石河子大学研究生招生信息网', '最终专业以 2027 招生目录为准'], sourceUrl: 'https://yz.shzu.edu.cn/' }),
   current({ id: 'cas-psych-2027', school: '中国科学院大学', institute: '中国科学院心理研究所', title: '2027 年招收推免硕士研究生（直博生）', type: '推免接收', tiers: ['科研院所', '双一流'], province: '北京', degrees: ['学术型硕士', '应用心理专硕', '直博'], directions: ['基础心理', '认知神经', '发展教育', '社会心理', '工程心理'], openAt: '2026-08-25T00:00:00+08:00', deadline: '2026-09-02T16:00:00+08:00', deadlinePrecision: 'minute', eventDates: '预计 2026 年 9 月 22—23 日考核', description: '作为 985/211 范围外的重要心理学科研院所补充收录。问卷、国科大系统及电子材料均须按通知完成。', requirements: ['须取得推免资格', '9 月 2 日 16:00 前完成问卷并提交材料', '申请前与拟报考导师沟通'], sourceUrl: 'https://psych.cas.cn/edu/zsxx/sszs/202608/t20260825_8265209.html' }),
+  ...coveragePrograms,
 ].filter((program) => !excludedInferredIds.has(program.id));
