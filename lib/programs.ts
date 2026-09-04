@@ -57,8 +57,6 @@ const applicationLinks: Record<string, string> = {
   'cas-psych-2027': 'https://admission.ucas.ac.cn/',
 };
 
-const excludedInferredIds = new Set(['cqu-2027', 'csu-2027', 'nxu-2027', 'tmu-2027', 'smmu-2027']);
-
 function verificationFor(program: CurrentSeed): VerificationLevel {
   if (collegeNoticeIds.has(program.id)) return 'college_notice';
   if (officialSystemIds.has(program.id)) return 'official_system';
@@ -178,4 +176,4 @@ export const programs: Program[] = [
   current({ id: 'shzu-2027', school: '石河子大学', institute: '师范学院应用心理专业', title: '2027 年推免接收信息（待学校公布）', type: '推免接收', tiers: ['211', '双一流'], province: '新疆', degrees: ['应用心理专硕'], directions: ['应用心理', '发展教育'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注石河子大学研究生招生信息网', '最终专业以 2027 招生目录为准'], sourceUrl: 'https://yz.shzu.edu.cn/' }),
   current({ id: 'cas-psych-2027', school: '中国科学院大学', institute: '中国科学院心理研究所', title: '2027 年招收推免硕士研究生（直博生）', type: '推免接收', tiers: ['科研院所', '双一流'], province: '北京', degrees: ['学术型硕士', '应用心理专硕', '直博'], directions: ['基础心理', '认知神经', '发展教育', '社会心理', '工程心理'], openAt: '2026-08-25T00:00:00+08:00', deadline: '2026-09-02T16:00:00+08:00', deadlinePrecision: 'minute', eventDates: '预计 2026 年 9 月 22—23 日考核', description: '作为 985/211 范围外的重要心理学科研院所补充收录。问卷、国科大系统及电子材料均须按通知完成。', requirements: ['须取得推免资格', '9 月 2 日 16:00 前完成问卷并提交材料', '申请前与拟报考导师沟通'], sourceUrl: 'https://psych.cas.cn/edu/zsxx/sszs/202608/t20260825_8265209.html' }),
   ...coveragePrograms,
-].filter((program) => !excludedInferredIds.has(program.id));
+];
