@@ -19,7 +19,7 @@ const tierOptions = ['985', '211', '双一流', '科研院所', '普通高校'];
 // 方向选项直接由院系数据生成，避免筛选标签与数据表中的专业方向脱节。
 const directionOptions = Array.from(new Set(programs.flatMap((program) => program.directions))).sort((a, b) => a.localeCompare(b, 'zh-CN'));
 const provinceOptions = ['北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆'];
-const degreeOptions: DegreeType[] = ['心理学（040200）', '应用心理（045400）', '心理健康教育（045116）', '教育心理学', '直博'];
+const degreeOptions: DegreeType[] = ['心理学（040200）', '应用心理（045400）', '心理健康教育（045100）', '心理健康教育（045116）', '教育心理学', '直博'];
 const statusOptions: ProgramStatus[] = ['open', 'upcoming', 'unknown', 'closed'];
 
 const statusMeta: Record<ProgramStatus, { label: string; tone: string }> = {
