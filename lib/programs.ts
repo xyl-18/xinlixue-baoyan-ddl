@@ -1,30 +1,36 @@
 export type DegreeType = '心理学（040200）' | '应用心理（045400）' | '心理健康教育（045100）' | '心理健康教育（045116）' | '教育心理学' | '直博';
 export type ProgramType = '夏令营' | '预推免' | '推免接收' | '直博选拔';
 export type DeadlinePrecision = 'minute' | 'day' | 'unknown';
-export type VerificationLevel = 'college_notice';
+export type VerificationLevel = 'college_notice' | 'school_notice';
 export type DeadlineKind = '网申截止' | '材料截止';
 export type DeadlineItem = { kind: DeadlineKind; label: string; at: string | null };
 
-/** 仅收录具体学院/研究院官网的 2027 招生或夏令营通知。 */
+/** 学院/研究院通知优先；仅在招生单位已核实的前提下补充学校研招网的 2027 通知。 */
 export type Program = {
   id: string; school: string; institute: string; title: string; type: ProgramType;
   tiers: string[]; province: string; degrees: DegreeType[]; directions: string[];
   openAt: string | null; deadline: string | null; deadlinePrecision: DeadlinePrecision; eventDates: string;
   description: string; requirements: string[];
-  /** 必填：具体学院/研究院发布的通知原文。 */ sourceUrl: string;
-  /** 仅当学院通知正文明确给出校内预报名入口时填写。 */ applicationUrl: string | null;
+  /** 必填：学院/研究院或学校研招网发布的通知原文。 */ sourceUrl: string;
+  /** 仅当通知正文明确给出预报名入口时填写。 */ applicationUrl: string | null;
   publishedAt: string; verifiedAt: string; verificationLevel: VerificationLevel; deadlines: DeadlineItem[];
 };
 
-export const sourceLabels = { pre2027: '2027 届 · 学院通知库' };
+export const sourceLabels = { pre2027: '2027 届 · 官方通知库' };
 
 const verifiedAt = '2026-09-04';
-const record = (item: Omit<Program, 'verifiedAt' | 'verificationLevel' | 'deadlines'> & { deadlines?: DeadlineItem[] }): Program => ({
-  ...item, verifiedAt, verificationLevel: 'college_notice',
+const record = (item: Omit<Program, 'verifiedAt' | 'verificationLevel' | 'deadlines'> & { verifiedAt?: string; verificationLevel?: VerificationLevel; deadlines?: DeadlineItem[] }): Program => ({
+  ...item, verifiedAt: item.verifiedAt ?? verifiedAt, verificationLevel: item.verificationLevel ?? 'college_notice',
   deadlines: item.deadlines ?? (item.deadline ? [{ kind: '网申截止', label: '网上报名截止', at: item.deadline }] : []),
 });
 
 export const programs: Program[] = [
+  record({ id: 'nju-social-2027', school: '南京大学', institute: '社会学院', title: '2027年接收推荐免试研究生预报名通知', type: '预推免', tiers: ['985', '211', '双一流'], province: '江苏', degrees: ['心理学（040200）'], directions: ['基础心理学', '应用心理学'], openAt: '2026-08-03T12:00:00+08:00', deadline: null, deadlinePrecision: 'unknown', eventDates: '具体截止时间与复试安排以社会学院后续通知为准', description: '学校研究生招生网已发布2027年推免预报名通知及院系截止时间汇总；社会学院已核实设有心理学相关学术学位培养方向。页面正文未公开可核验的该院统一截止时刻，因此不展示倒计时。', requirements: ['获得或预计获得推免资格', '在南京大学推免预报名系统提交材料', '持续关注社会学院后续通知'], sourceUrl: 'https://yzb.nju.edu.cn/d4/52/c47863a840786/page.htm', applicationUrl: 'https://gs.nju.edu.cn/geapp/sys/yjsbmxsd/entrance.do', publishedAt: '2026-08-03', verifiedAt: '2026-09-05', verificationLevel: 'school_notice' }),
+  record({ id: 'zju-psych-2027', school: '浙江大学', institute: '心理与行为科学系', title: '2027年接收外校推荐免试研究生工作安排（心理系报考说明）', type: '预推免', tiers: ['985', '211', '双一流'], province: '浙江', degrees: ['心理学（040200）', '应用心理（045400）', '直博'], directions: ['应用心理学', '认知神经科学'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '具体截止时间与考核安排以心理与行为科学系后续通知为准', description: '学校研招网已发布2027年接收外校推免生工作安排；心理与行为科学系报考说明明确可申请045400应用心理硕士及040200心理学本科直博。学院未公开可核验的统一截止时刻，因此不展示倒计时。', requirements: ['获得或预计获得推免资格', '按浙江大学2027年免试生申请要求上传材料', '持续关注心理与行为科学系后续通知'], sourceUrl: 'https://www.grs.zju.edu.cn/yjszs/2026/0805/c28479a3193539/page.htm', applicationUrl: null, publishedAt: '2026-08-05', verifiedAt: '2026-09-05', verificationLevel: 'school_notice' }),
+  record({ id: 'bnu-psy-2027', school: '北京师范大学', institute: '心理学部', title: '2027年推荐免试硕士／博士研究生招生录取工作办法', type: '推免接收', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['心理学（040200）'], directions: ['基础心理学', '认知神经科学'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '具体考核安排以心理学部后续通知为准', description: '学校研招网公告明确：除特别说明外，所有学术学位硕士招生专业接收推免生；心理学部的具体申请截止日期以推免申请系统及学部后续通知为准。', requirements: ['获得本科院校推免资格', '在北京师范大学推免申请系统提交材料', '持续关注心理学部后续考核安排'], sourceUrl: 'https://yz.bnu.edu.cn/detail/be0e6268-0bfd-4a34-aa31-e72207bf2577', applicationUrl: 'https://xly.bnu.edu.cn/tm', publishedAt: '2026-09-02', verifiedAt: '2026-09-05', verificationLevel: 'school_notice' }),
+  record({ id: 'tju-soe-2027', school: '天津大学', institute: '教育学院', title: '2027年接收优秀应届本科毕业生免试攻读研究生预报名', type: '预推免', tiers: ['985', '211', '双一流'], province: '天津', degrees: ['心理学（040200）', '应用心理（045400）'], directions: ['基础心理学', '应用心理学'], openAt: '2026-07-07T12:00:00+08:00', deadline: '2026-09-20T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '教育学院集中审核节点：8月15日、9月6日；考核由学院另行组织', description: '学校研招网统一预报名通知列明教育学院的集中审核节点，并规定系统拟于9月20日关闭；教育学院已核实设有040200心理学、045400应用心理培养方向。', requirements: ['获得或预计获得推免资格', '在天津大学推免硕士申请系统提交材料', '尽量在教育学院集中审核节点前完成申报'], sourceUrl: 'https://yzb.tju.edu.cn/xwzx/tkss_xw/202607/t20260702_324675.htm', applicationUrl: 'https://sszs.tju.edu.cn/10056/user/login/login', publishedAt: '2026-07-02', verifiedAt: '2026-09-05', verificationLevel: 'school_notice', deadlines: [{ kind: '网申截止', label: '学校预报名系统拟关闭', at: '2026-09-20T23:59:59+08:00' }] }),
+  record({ id: 'suda-edu-2027', school: '苏州大学', institute: '教育学院、教育科学研究院', title: '2027级推荐免试研究生（含直博生）预报名', type: '预推免', tiers: ['211', '双一流'], province: '江苏', degrees: ['心理学（040200）', '应用心理（045400）'], directions: ['基础心理学', '发展与教育心理学', '应用心理学'], openAt: '2026-08-15T00:00:00+08:00', deadline: null, deadlinePrecision: 'unknown', eventDates: '考核与报名截止由教育学院、教育科学研究院另行通知', description: '学校研招网公告明确所有全日制硕士招生专业均可接收推免生，预报名自8月15日起；已核实教育学院、教育科学研究院设有040200心理学及045400应用心理。该单位的最终截止时间以报名系统和学院通知为准。', requirements: ['预计获得推免资格', '通过苏州大学研究生报考服务系统预报名', '关注教育学院、教育科学研究院后续通知'], sourceUrl: 'https://yjs.suda.edu.cn/da/52/c8365a711250/page.htm', applicationUrl: 'http://gsas.yjs.suda.edu.cn', publishedAt: '2026-08-10', verifiedAt: '2026-09-05', verificationLevel: 'school_notice' }),
+  record({ id: 'swu-psy-2027', school: '西南大学', institute: '心理学部', title: '2027年接收优秀应届本科毕业生推荐免（初）试攻读研究生预报名', type: '预推免', tiers: ['211', '双一流'], province: '重庆', degrees: ['心理学（040200）', '应用心理（045400）', '心理健康教育（045116）'], directions: ['基础心理学', '发展与教育心理学', '应用心理学', '认知神经科学', '学校心理学'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '报名及复试时间以心理学部后续通知为准', description: '学校研招网公告明确预报名系统中可选报的全日制硕士专业均可接收推免生；心理学部已核实有040200心理学、045400应用心理和045116心理健康教育等相关培养方向。', requirements: ['获得或预计获得推免资格', '在西南大学2027年推免生预报名系统提交材料', '持续关注心理学部的具体时间安排'], sourceUrl: 'https://yz.swu.edu.cn/info/1005/3562.htm', applicationUrl: 'http://swu.yjszsw.cn/tm/', publishedAt: '2026-09-04', verifiedAt: '2026-09-05', verificationLevel: 'school_notice' }),
   record({ id: 'pku-psy-2027', school: '北京大学', institute: '心理与认知科学学院', title: '2027年推荐免试研究生相关事项说明', type: '直博选拔', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['直博'], directions: ['基础心理学', '应用心理学', '认知神经科学', '发展与教育心理学', '社会心理学', '健康心理学'], openAt: null, deadline: '2026-09-08T10:00:00+08:00', deadlinePrecision: 'minute', eventDates: '预计9月18日前后面试', description: '学院明确仅接收本科起点直博生；通知同时规定网报与纸质材料送达两个节点。', requirements: ['获得推免资格', '按通知完成网报与材料寄送'], sourceUrl: 'https://www.psy.pku.edu.cn/xwzx/tzgg/a353e2b94a004709ab71e0841d95cbe7.htm', applicationUrl: 'https://admission.pku.edu.cn/', publishedAt: '2026-09-01', deadlines: [{ kind: '网申截止', label: '网上报名截止', at: '2026-09-08T10:00:00+08:00' }, { kind: '材料截止', label: '纸质材料送达', at: '2026-09-08T17:00:00+08:00' }] }),
   record({ id: 'thu-pcs-2027', school: '清华大学', institute: '心理与认知科学系', title: '2027年博士研究生招生简章（含本科直博）', type: '直博选拔', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['直博'], directions: ['基础心理学', '认知神经科学'], openAt: '2026-07-01T10:00:00+08:00', deadline: '2026-07-28T15:00:00+08:00', deadlinePrecision: 'minute', eventDates: '综合考核由院系另行通知', description: '学院招生简章明确本科直博申请通过清华大学研究生申请服务系统提交。', requirements: ['符合本科直博申请条件', '按系统上传完整申请材料'], sourceUrl: 'https://www.pcs.tsinghua.edu.cn/info/1031/2141.htm', applicationUrl: 'https://yzbm.tsinghua.edu.cn/', publishedAt: '2026-07-02' }),
   record({ id: 'ruc-psy-2027', school: '中国人民大学', institute: '心理学系', title: '2027年推免生接收工作报名通知', type: '预推免', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['心理学（040200）'], directions: ['应用心理学', '社会心理学'], openAt: '2026-07-01T10:00:00+08:00', deadline: '2026-07-06T15:00:00+08:00', deadlinePrecision: 'minute', eventDates: '以院系复试通知为准', description: '心理学系发布的预报名通知，覆盖心理学相关培养方向。', requirements: ['预计取得推免资格', '按学院要求提交成绩、排名及证明材料'], sourceUrl: 'https://psy.ruc.edu.cn/xwdt/tzgg/efeb9a4f6748498aa5442ecc9e41e258.htm', applicationUrl: null, publishedAt: '2026-07-01' }),

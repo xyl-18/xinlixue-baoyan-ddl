@@ -31,6 +31,7 @@ const statusMeta: Record<ProgramStatus, { label: string; tone: string }> = {
 
 const verificationMeta: Record<VerificationLevel, { label: string; short: string; tone: string }> = {
   college_notice: { label: '学院正式通知', short: '学院通知', tone: 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:text-emerald-300 dark:bg-emerald-950/50 dark:border-emerald-900' },
+  school_notice: { label: '学校研招通知', short: '学校通知', tone: 'text-sky-700 bg-sky-50 border-sky-200 dark:text-sky-300 dark:bg-sky-950/50 dark:border-sky-900' },
 };
 
 const initialClock = new Date('2026-09-04T00:00:00+08:00').getTime();
@@ -176,8 +177,8 @@ export default function Home() {
     </header>
 
     <section className="border-b bg-card"><div className="mx-auto flex max-w-[1500px] items-center gap-2 overflow-x-auto px-4 py-3 md:px-7">
-      <Button size="sm" className="rounded-full px-3" aria-pressed="true">学院官方通知 <span className="text-primary-foreground/70">{modeCounts.all}</span></Button>
-      <div className="ml-auto flex shrink-0 items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="size-3.5 text-emerald-600" />仅收录学院/研究院原文 · 2026-09-04</div>
+      <Button size="sm" className="rounded-full px-3" aria-pressed="true">官方通知 <span className="text-primary-foreground/70">{modeCounts.all}</span></Button>
+      <div className="ml-auto flex shrink-0 items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="size-3.5 text-emerald-600" />学院/研究院优先 · 学校研招补充</div>
     </div></section>
 
     <div className="mx-auto grid max-w-[1500px] grid-cols-1 md:grid-cols-[238px_minmax(0,1fr)]">
@@ -190,10 +191,10 @@ export default function Home() {
 
         {(chips.length > 0 || query) && <div className="mt-3 flex flex-wrap items-center gap-1.5 rounded-xl border bg-card px-3 py-2"><span className="mr-1 text-xs text-muted-foreground">已选</span>{query && <button className="filter-chip" onClick={() => setQuery('')}>关键词：{query}<X /></button>}{chips.map((chip) => <button key={`${chip.kind}-${chip.value}`} className="filter-chip" onClick={() => removeChip(chip.kind, chip.value)}>{chip.label}<X /></button>)}<button className="ml-auto text-xs text-primary hover:underline" onClick={clearFilters}>清除全部</button></div>}
 
-        <div className="mt-6"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Verified college notices only</p><h1 className="mt-1 text-2xl font-bold tracking-tight">{view === 'calendar' ? formatMonth(calendarCursor) : '心理学学院级推免通知'}</h1><p className="mt-1 text-sm text-muted-foreground">每一行都定位到具体学院、学部或研究院的官方通知；学校级公告和推测记录不收录。</p></div>
+        <div className="mt-6"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Verified official notices</p><h1 className="mt-1 text-2xl font-bold tracking-tight">{view === 'calendar' ? formatMonth(calendarCursor) : '心理学推免官方通知'}</h1><p className="mt-1 text-sm text-muted-foreground">学院、学部和研究院通知优先；仅在具体培养单位已核实后补充学校研招公告。</p></div>
 
         {view === 'list' ? <ProgramList rows={visibleRows} now={now} selectedId={selectedId} onSelect={setSelectedId} /> : <CalendarView rows={visibleRows} now={now} cursor={calendarCursor} onCursor={setCalendarCursor} onSelect={setSelectedId} />}
-        <div className="mt-5 flex gap-2 rounded-xl border border-dashed bg-muted/35 px-4 py-3 text-xs leading-5 text-muted-foreground"><Info className="mt-0.5 size-4 shrink-0" /><p><strong className="text-foreground">收录规则：</strong>仅收录能定位到具体学院、学部或研究院官网的 2027 通知。学校级公告、招生目录、往年通知和无法核验的培养单位均不展示；未写截止时刻的学院通知只显示“截止未公布”。</p></div>
+        <div className="mt-5 flex gap-2 rounded-xl border border-dashed bg-muted/35 px-4 py-3 text-xs leading-5 text-muted-foreground"><Info className="mt-0.5 size-4 shrink-0" /><p><strong className="text-foreground">收录规则：</strong>优先收录能定位到具体学院、学部或研究院官网的 2027 通知；若相关培养单位已核实而学院尚未单独发文，则补充学校研招网公告并标注“学校通知”。招生目录、往年通知和无法核验的培养单位均不展示；未写截止时刻的通知只显示“截止未公布”。</p></div>
       </section>
     </div>
 
@@ -250,18 +251,18 @@ function FilterGroup<T extends string>({ title, options, labels, selected, onCha
 
 function ProgramDetail({ program, now, onClose }: { program: Program | null; now: number; onClose: () => void }) {
   const remaining = program ? countdownParts(program, now) : null;
-  return <OverlayPanel open={Boolean(program)} side="right" title={program?.school ?? ''} description={program ? `${program.institute} · ${program.title}` : ''} onClose={onClose} width="sm:max-w-xl" hideDefaultHeader footer={program && <div className="grid gap-2"><div className="grid grid-cols-1 gap-2 sm:grid-cols-2">{program.sourceUrl ? <Button variant="outline" onClick={() => window.open(program.sourceUrl!, '_blank', 'noopener,noreferrer')}><ExternalLink />查看通知</Button> : <Button variant="outline" disabled><ExternalLink />通知待补</Button>}{program.applicationUrl ? <Button onClick={() => window.open(program.applicationUrl!, '_blank', 'noopener,noreferrer')}><Link2 />报名入口</Button> : <Button disabled><Link2 />报名入口待开放</Button>}</div><p className="text-center text-[11px] text-muted-foreground">最近核验：{program.verifiedAt} · 报名前请以学院通知为准</p></div>}>
+  return <OverlayPanel open={Boolean(program)} side="right" title={program?.school ?? ''} description={program ? `${program.institute} · ${program.title}` : ''} onClose={onClose} width="sm:max-w-xl" hideDefaultHeader footer={program && <div className="grid gap-2"><div className="grid grid-cols-1 gap-2 sm:grid-cols-2">{program.sourceUrl ? <Button variant="outline" onClick={() => window.open(program.sourceUrl!, '_blank', 'noopener,noreferrer')}><ExternalLink />查看通知</Button> : <Button variant="outline" disabled><ExternalLink />通知待补</Button>}{program.applicationUrl ? <Button onClick={() => window.open(program.applicationUrl!, '_blank', 'noopener,noreferrer')}><Link2 />报名入口</Button> : <Button disabled><Link2 />报名入口待开放</Button>}</div><p className="text-center text-[11px] text-muted-foreground">最近核验：{program.verifiedAt} · 报名前请以所列通知和招生单位后续要求为准</p></div>}>
     {program && <><div className="border-b p-5 pr-14"><div className="mb-3 flex flex-wrap gap-2"><Badge variant="outline" className={statusMeta[getStatus(program, now)].tone}>{statusMeta[getStatus(program, now)].label}</Badge><Badge variant="outline" className={verificationMeta[program.verificationLevel].tone}>{verificationMeta[program.verificationLevel].label}</Badge><Badge variant="secondary">{program.type}</Badge></div><h2 className="text-xl font-bold leading-tight">{program.school}</h2><p className="mt-1 text-base font-semibold text-primary">{program.institute}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{program.title}</p></div>
       <div className="space-y-6 px-5 py-5"><div className="rounded-2xl bg-primary p-5 text-primary-foreground"><p className="text-xs text-primary-foreground/70">{program.deadline ? '距离主要截止' : '当前状态'}</p>{remaining ? <div className="mt-3 grid grid-cols-4 gap-2">{remaining.map(([value, label]) => <div key={label} className="rounded-xl bg-white/10 p-2 text-center"><p className="text-xl font-black tabular-nums">{value}</p><p className="text-[10px] text-primary-foreground/70">{label}</p></div>)}</div> : <p className="mt-2 text-2xl font-bold">日期尚未公布</p>}<p className="mt-3 text-sm text-primary-foreground/80">{formatDeadline(program, true)}</p>{program.deadline && <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-white/85" style={{ width: `${deadlineProgress(program, now)}%` }} /></div>}</div>
         <DetailSection title="招生单位"><DetailRow icon={<Building2 />} label="学院" value={program.institute} /><DetailRow icon={<MapPin />} label="地区" value={program.province} /><DetailRow icon={<GraduationCap />} label="培养类型" value={program.degrees.join('、')} /><DetailRow icon={<Link2 />} label="来源层级" value={verificationMeta[program.verificationLevel].label} /></DetailSection>
-        <DetailSection title="时间节点"><div className="space-y-2">{program.deadlines.length ? program.deadlines.map((item) => <div key={`${item.kind}-${item.label}`} className="flex items-start justify-between gap-4 rounded-xl border bg-muted/25 px-3 py-3"><div className="flex gap-2"><CalendarClock className="mt-0.5 size-4 text-primary" /><div><p className="text-sm font-medium">{item.label}</p><p className="text-xs text-muted-foreground">{item.kind}</p></div></div><p className="text-right text-sm font-semibold tabular-nums">{item.at ? formatDateTime(item.at) : '待公布'}</p></div>) : <p className="rounded-xl border border-dashed p-3 text-sm text-muted-foreground">学院尚未公布可核验的具体截止节点。</p>}</div></DetailSection>
+        <DetailSection title="时间节点"><div className="space-y-2">{program.deadlines.length ? program.deadlines.map((item) => <div key={`${item.kind}-${item.label}`} className="flex items-start justify-between gap-4 rounded-xl border bg-muted/25 px-3 py-3"><div className="flex gap-2"><CalendarClock className="mt-0.5 size-4 text-primary" /><div><p className="text-sm font-medium">{item.label}</p><p className="text-xs text-muted-foreground">{item.kind}</p></div></div><p className="text-right text-sm font-semibold tabular-nums">{item.at ? formatDateTime(item.at) : '待公布'}</p></div>) : <p className="rounded-xl border border-dashed p-3 text-sm text-muted-foreground">通知尚未公布可核验的具体截止节点。</p>}</div></DetailSection>
         <DetailSection title="项目信息"><DetailRow label="专业方向" value={program.directions.join('、')} /><DetailRow label="考核安排" value={program.eventDates} /></DetailSection><DetailSection title="通知说明"><p className="text-sm leading-7 text-muted-foreground">{program.description}</p></DetailSection><DetailSection title="申请提示"><ul className="space-y-2 text-sm text-muted-foreground">{program.requirements.map((item) => <li key={item} className="flex gap-2"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />{item}</li>)}</ul></DetailSection><SourceNotice level={program.verificationLevel} /></div>
     </>}
   </OverlayPanel>;
 }
 
 function SourceNotice({ level }: { level: VerificationLevel }) {
-  const messages: Record<VerificationLevel, string> = { college_notice: '该记录链接至具体学院、学部或研究院发布的官方通知。提交前仍建议再次核对通知附件和报名系统。' };
+  const messages: Record<VerificationLevel, string> = { college_notice: '该记录链接至具体学院、学部或研究院发布的官方通知。提交前仍建议再次核对通知附件和报名系统。', school_notice: '该记录链接至学校研究生招生网的官方通知；页面中的具体培养单位已核实，但其单独的 2027 通知或截止时间可能尚未发布。请持续关注该学院后续公告。' };
   return <div className={`rounded-xl border p-4 text-xs leading-5 ${verificationMeta[level].tone}`}>{messages[level]}</div>;
 }
 
