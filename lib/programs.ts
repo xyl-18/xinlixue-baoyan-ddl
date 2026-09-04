@@ -1,107 +1,60 @@
 export type DataSource = 'pre2027' | 'camp2027' | 'archive2026';
 export type ProgramType = '夏令营' | '预推免' | '推免接收' | '直博选拔';
-export type DegreeType = '学术型硕士' | '应用心理专硕' | '直博';
+export type DegreeType = '学术型硕士' | '应用心理专硕' | '心理健康教育' | '直博';
 export type DeadlinePrecision = 'minute' | 'day' | 'unknown';
 
 export type Program = {
-  id: string;
-  source: DataSource;
-  school: string;
-  institute: string;
-  title: string;
-  type: ProgramType;
-  tiers: string[];
-  province: string;
-  degrees: DegreeType[];
-  directions: string[];
-  openAt: string | null;
-  deadline: string | null;
-  deadlinePrecision: DeadlinePrecision;
-  eventDates: string;
-  description: string;
-  requirements: string[];
-  sourceUrl: string | null;
-  verifiedAt: string;
-  demo: true;
+  id: string; source: DataSource; school: string; institute: string; title: string;
+  type: ProgramType; tiers: string[]; province: string; degrees: DegreeType[]; directions: string[];
+  openAt: string | null; deadline: string | null; deadlinePrecision: DeadlinePrecision; eventDates: string;
+  description: string; requirements: string[]; sourceUrl: string | null; verifiedAt: string; demo: boolean;
 };
 
 export const sourceLabels: Record<DataSource, string> = {
-  pre2027: '2027 预推免',
-  camp2027: '2027 夏令营',
-  archive2026: '2026 历史数据',
+  pre2027: '2027 预推免', camp2027: '2027 夏令营', archive2026: '2026 历史数据',
 };
 
+type CurrentSeed = Omit<Program, 'source' | 'verifiedAt' | 'demo'>;
+const current = (program: CurrentSeed): Program => ({ ...program, source: 'pre2027', verifiedAt: '2026-09-04', demo: false });
+const pending = '截至 2026-09-04，已确认该校设有心理学相关研究生培养项目，但未检索到院系公布的 2027 届明确截止时刻。本站不使用往年日期代替，请持续查看官方入口。';
+
 export const programs: Program[] = [
-  {
-    id: 'demo-bnu-pre', source: 'pre2027', school: '北京师范大学', institute: '心理学部', title: '2027 年推免生预报名（演示）',
-    type: '预推免', tiers: ['985', '双一流'], province: '北京', degrees: ['学术型硕士', '直博'], directions: ['认知心理', '发展教育'],
-    openAt: '2026-08-25T09:00:00+08:00', deadline: '2026-09-08T17:00:00+08:00', deadlinePrecision: 'minute', eventDates: '以正式通知为准',
-    description: '用于展示信息层级与倒计时的演示条目，不代表该校真实招生安排。', requirements: ['具有推免资格', '具体专业与材料要求待正式通知核验'], sourceUrl: null, verifiedAt: '2026-09-04', demo: true,
-  },
-  {
-    id: 'demo-ecnu-pre', source: 'pre2027', school: '华东师范大学', institute: '心理与认知科学学院', title: '2027 年推免接收报名（演示）',
-    type: '推免接收', tiers: ['985', '双一流'], province: '上海', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理', '心理统计'],
-    openAt: '2026-08-28T09:00:00+08:00', deadline: '2026-09-12T23:59:00+08:00', deadlinePrecision: 'minute', eventDates: '以正式通知为准',
-    description: '演示多培养类型、多方向标签和精确截止时间的呈现方式。', requirements: ['具有推免资格', '部分方向可能要求相关专业背景'], sourceUrl: null, verifiedAt: '2026-09-04', demo: true,
-  },
-  {
-    id: 'demo-zju-pre', source: 'pre2027', school: '浙江大学', institute: '心理与行为科学系', title: '2027 年推免预报名（演示）',
-    type: '预推免', tiers: ['985', '双一流'], province: '浙江', degrees: ['学术型硕士', '直博'], directions: ['工程心理', '认知神经'],
-    openAt: '2026-09-01T00:00:00+08:00', deadline: '2026-09-18T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '以正式通知为准',
-    description: '演示只明确到日期的通知；正式页面会提示具体时刻未注明。', requirements: ['具有推免资格', '报名条件待核验'], sourceUrl: null, verifiedAt: '2026-09-04', demo: true,
-  },
-  {
-    id: 'demo-psychcas-pre', source: 'pre2027', school: '中国科学院大学', institute: '心理研究所', title: '2027 年推免生接收（演示）',
-    type: '推免接收', tiers: ['科研院所', '双一流'], province: '北京', degrees: ['学术型硕士', '直博'], directions: ['基础心理', '认知神经'],
-    openAt: '2026-09-03T09:00:00+08:00', deadline: '2026-09-22T17:00:00+08:00', deadlinePrecision: 'minute', eventDates: '以正式通知为准',
-    description: '演示科研院所类别和直博项目的展示方式。', requirements: ['具有推免资格', '直博申请要求待核验'], sourceUrl: null, verifiedAt: '2026-09-04', demo: true,
-  },
-  {
-    id: 'demo-swu-pre', source: 'pre2027', school: '西南大学', institute: '心理学部', title: '2027 年接收推免生报名（演示）',
-    type: '推免接收', tiers: ['211', '双一流'], province: '重庆', degrees: ['学术型硕士', '应用心理专硕'], directions: ['基础心理', '发展教育', '应用心理'],
-    openAt: '2026-09-06T09:00:00+08:00', deadline: '2026-09-20T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '以正式通知为准',
-    description: '演示尚未开始报名项目的状态。', requirements: ['具有推免资格'], sourceUrl: null, verifiedAt: '2026-09-04', demo: true,
-  },
-  {
-    id: 'demo-nnu-pre', source: 'pre2027', school: '南京师范大学', institute: '心理学院', title: '2027 年推免预报名（演示）',
-    type: '预推免', tiers: ['211', '双一流'], province: '江苏', degrees: ['学术型硕士', '应用心理专硕'], directions: ['发展教育', '临床咨询'],
-    openAt: '2026-08-20T09:00:00+08:00', deadline: '2026-09-02T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '以正式通知为准',
-    description: '演示已截止项目的归档呈现。', requirements: ['具有推免资格'], sourceUrl: null, verifiedAt: '2026-09-04', demo: true,
-  },
-  {
-    id: 'demo-pku-pre', source: 'pre2027', school: '北京大学', institute: '心理与认知科学学院', title: '2027 年推免招生（演示）',
-    type: '直博选拔', tiers: ['985', '双一流'], province: '北京', degrees: ['直博'], directions: ['基础心理', '认知神经'],
-    openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待通知',
-    description: '演示截止时间尚未公布的项目。', requirements: ['招生信息待官方发布'], sourceUrl: null, verifiedAt: '2026-09-04', demo: true,
-  },
-  {
-    id: 'demo-bnu-camp', source: 'camp2027', school: '北京师范大学', institute: '心理学部', title: '2026 年优秀大学生夏令营（演示）',
-    type: '夏令营', tiers: ['985', '双一流'], province: '北京', degrees: ['学术型硕士', '直博'], directions: ['基础心理', '发展教育'],
-    openAt: '2026-05-20T09:00:00+08:00', deadline: '2026-06-12T17:00:00+08:00', deadlinePrecision: 'minute', eventDates: '2026 年 7 月（演示）',
-    description: '历史演示条目，不代表真实通知。', requirements: ['面向 2027 届本科生（演示）'], sourceUrl: null, verifiedAt: '2026-06-12', demo: true,
-  },
-  {
-    id: 'demo-ecnu-camp', source: 'camp2027', school: '华东师范大学', institute: '心理与认知科学学院', title: '2026 年优秀大学生夏令营（演示）',
-    type: '夏令营', tiers: ['985', '双一流'], province: '上海', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理', '临床咨询'],
-    openAt: '2026-05-18T09:00:00+08:00', deadline: '2026-06-16T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '2026 年 7 月（演示）',
-    description: '历史演示条目，不代表真实通知。', requirements: ['面向 2027 届本科生（演示）'], sourceUrl: null, verifiedAt: '2026-06-16', demo: true,
-  },
-  {
-    id: 'demo-whu-camp', source: 'camp2027', school: '武汉大学', institute: '哲学学院心理学系', title: '2026 年优秀大学生夏令营（演示）',
-    type: '夏令营', tiers: ['985', '双一流'], province: '湖北', degrees: ['学术型硕士'], directions: ['基础心理', '社会心理'],
-    openAt: '2026-05-25T09:00:00+08:00', deadline: '2026-06-20T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '2026 年 7 月（演示）',
-    description: '演示跨学院设置的心理学项目。', requirements: ['具体专业背景要求待核验'], sourceUrl: null, verifiedAt: '2026-06-20', demo: true,
-  },
-  {
-    id: 'demo-bnu-archive', source: 'archive2026', school: '北京师范大学', institute: '心理学部', title: '2025 年推免接收（历史演示）',
-    type: '推免接收', tiers: ['985', '双一流'], province: '北京', degrees: ['学术型硕士', '直博'], directions: ['认知心理', '发展教育'],
-    openAt: '2025-08-25T09:00:00+08:00', deadline: '2025-09-10T17:00:00+08:00', deadlinePrecision: 'minute', eventDates: '已结束',
-    description: '用于验证历史数据源切换。', requirements: ['历史演示条目'], sourceUrl: null, verifiedAt: '2025-09-10', demo: true,
-  },
-  {
-    id: 'demo-swu-archive', source: 'archive2026', school: '西南大学', institute: '心理学部', title: '2025 年推免预报名（历史演示）',
-    type: '预推免', tiers: ['211', '双一流'], province: '重庆', degrees: ['学术型硕士', '应用心理专硕'], directions: ['基础心理', '应用心理'],
-    openAt: '2025-08-28T09:00:00+08:00', deadline: '2025-09-16T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '已结束',
-    description: '用于验证历史数据源切换。', requirements: ['历史演示条目'], sourceUrl: null, verifiedAt: '2025-09-16', demo: true,
-  },
+  current({ id: 'pku-2027', school: '北京大学', institute: '心理与认知科学学院', title: '2027 年推荐免试研究生相关事项说明', type: '直博选拔', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['直博'], directions: ['基础心理', '认知神经', '应用心理'], openAt: null, deadline: '2026-09-08T10:00:00+08:00', deadlinePrecision: 'minute', eventDates: '预计 2026 年 9 月 18 日前后面试', description: '本科起点仅招收直博生。网上报名须在 9 月 8 日 10:00 前完成，纸质材料另须在当日 17:00 前送达。', requirements: ['须获得本科所在学校推免资格', '按系统要求提交申请并寄送或提交完整材料'], sourceUrl: 'https://www.psy.pku.edu.cn/xwzx/tzgg/a353e2b94a004709ab71e0841d95cbe7.htm' }),
+  current({ id: 'tsinghua-2027', school: '清华大学', institute: '心理与认知科学系', title: '2027 年博士研究生招生（本科直博）', type: '直博选拔', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['直博'], directions: ['基础心理', '认知神经', '社会心理'], openAt: '2026-07-01T10:00:00+08:00', deadline: '2026-07-28T15:00:00+08:00', deadlinePrecision: 'minute', eventDates: '院系后续通知', description: '该通知覆盖本科直博申请，报名时段为 7 月 1 日 10:00 至 7 月 28 日 15:00，当前已截止。', requirements: ['符合清华大学博士生招生申请条件', '本科直博申请人须具备推免资格'], sourceUrl: 'https://www.pcs.tsinghua.edu.cn/info/1031/2141.htm' }),
+  current({ id: 'ruc-2027', school: '中国人民大学', institute: '心理学系', title: '2027 年推免生接收工作报名通知', type: '预推免', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['学术型硕士'], directions: ['社会心理', '应用心理'], openAt: '2026-07-01T10:00:00+08:00', deadline: '2026-07-06T15:00:00+08:00', deadlinePrecision: 'minute', eventDates: '以院系复试通知为准', description: '心理学与社会心理学相关专业预报名，报名窗口较短，当前已截止。', requirements: ['预计取得所在学校推免资格', '按学院系统要求提交成绩、排名及证明材料'], sourceUrl: 'https://psy.ruc.edu.cn/xwdt/tzgg/efeb9a4f6748498aa5442ecc9e41e258.htm' }),
+  current({ id: 'bnu-2027', school: '北京师范大学', institute: '心理学部', title: '2027 年接收推荐免试研究生工作办法', type: '推免接收', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['学术型硕士', '应用心理专硕', '直博'], directions: ['基础心理', '发展教育', '临床咨询', '认知神经'], openAt: '2026-09-02T00:00:00+08:00', deadline: null, deadlinePrecision: 'unknown', eventDates: '各院系自定', description: '学校已发布 2027 年推免接收办法；心理学部具体报名截止时间以北师大招生系统中显示为准。', requirements: ['须具有推荐免试资格', '按心理学部和学校系统要求完成报名'], sourceUrl: 'https://yz.bnu.edu.cn/detail/be0e6268-0bfd-4a34-aa31-e72207bf2577' }),
+  current({ id: 'muc-2027', school: '中央民族大学', institute: '教育学院', title: '2027 年推荐免试研究生（含直博生）预报名', type: '预推免', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['学术型硕士', '应用心理专硕', '直博'], directions: ['发展教育', '应用心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '以附件及学院通知为准', description: '教育学院已发布 2027 年预报名通知，具体要求见官网附件；网页正文未给出可稳定核验的截止时刻。', requirements: ['预计取得推免资格', '按通知附件准备申请材料'], sourceUrl: 'https://edu.muc.edu.cn/info/1030/8818.htm' }),
+  current({ id: 'cufe-2027', school: '中央财经大学', institute: '社会与心理学院', title: '2027 年接收推免生常规考核报名', type: '推免接收', tiers: ['211', '双一流'], province: '北京', degrees: ['学术型硕士'], directions: ['应用心理', '社会心理'], openAt: null, deadline: '2026-09-06T12:00:00+08:00', deadlinePrecision: 'minute', eventDates: '学院后续通知', description: '心理学专业常规考核报名延期至 9 月 6 日 12:00，招生名额以学院通知为准。', requirements: ['预计取得推免资格', '在学校推免报名系统提交材料'], sourceUrl: 'https://gs.cufe.edu.cn/info/1028/7101.htm' }),
+  current({ id: 'bjfu-2027', school: '北京林业大学', institute: '人文社会科学学院心理学系', title: '2027 年推免接收信息（待院系公布）', type: '推免接收', tiers: ['211', '双一流'], province: '北京', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理', '临床咨询'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注学校研究生院及人文学院通知', '最终专业以 2027 招生目录为准'], sourceUrl: 'https://graduate.bjfu.edu.cn/' }),
+  current({ id: 'cupl-2027', school: '中国政法大学', institute: '社会学院心理学系', title: '2027 年推免接收信息（待院系公布）', type: '推免接收', tiers: ['211', '双一流'], province: '北京', degrees: ['学术型硕士', '应用心理专硕'], directions: ['社会心理', '临床咨询', '应用心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注学校研究生院和社会学院通知', '最终专业与名额以招生目录为准'], sourceUrl: 'https://yjsy.cupl.edu.cn/' }),
+  current({ id: 'ecnu-2027', school: '华东师范大学', institute: '心理与认知科学学院', title: '2027 年推免研究生预报名', type: '预推免', tiers: ['985', '211', '双一流'], province: '上海', degrees: ['学术型硕士', '应用心理专硕', '直博'], directions: ['基础心理', '发展教育', '应用心理', '临床咨询', '认知神经'], openAt: '2026-07-24T09:00:00+08:00', deadline: '2026-09-14T12:00:00+08:00', deadlinePrecision: 'minute', eventDates: '学院后续通知', description: '覆盖心理学学硕、应用心理专硕及直博，报名系统开放至 9 月 14 日 12:00。', requirements: ['有望获得推免资格', '按学校系统提交申请及证明材料'], sourceUrl: 'https://psy.ecnu.edu.cn/c3/cd/c17481a771021/page.htm' }),
+  current({ id: 'fudan-2027', school: '复旦大学', institute: '社会发展与公共政策学院', title: '2027 年推免生预报名（心理学相关专业）', type: '预推免', tiers: ['985', '211', '双一流'], province: '上海', degrees: ['学术型硕士', '应用心理专硕'], directions: ['社会心理', '应用心理'], openAt: '2026-07-06T10:00:00+08:00', deadline: '2026-08-10T17:00:00+08:00', deadlinePrecision: 'minute', eventDates: '院系安排可能不同', description: '学校预报名通知给出的常规窗口为 7 月 6 日 10:00 至 8 月 10 日 17:00；院系安排如有不同，以院系原文为准。', requirements: ['有望取得推免资格', '申请人须同时关注院系补充通知'], sourceUrl: 'https://gsao.fudan.edu.cn/fb/0b/c15014a785163/page.htm' }),
+  current({ id: 'tongji-2027', school: '同济大学', institute: '人文学院', title: '2027 年接收推荐免试研究生预报名', type: '预推免', tiers: ['985', '211', '双一流'], province: '上海', degrees: ['学术型硕士'], directions: ['基础心理', '社会心理'], openAt: null, deadline: '2026-09-06T12:00:00+08:00', deadlinePrecision: 'minute', eventDates: '学院后续通知', description: '人文学院心理学相关方向预报名，截止至 9 月 6 日 12:00。专业范围与材料清单以学院原通知为准。', requirements: ['预计取得推免资格', '在同济大学研究生招生系统完成报名'], sourceUrl: 'https://sal.tongji.edu.cn/info/1023/4818.htm' }),
+  current({ id: 'zju-2027', school: '浙江大学', institute: '心理与行为科学系', title: '2027 年接收推荐免试研究生报名', type: '推免接收', tiers: ['985', '211', '双一流'], province: '浙江', degrees: ['学术型硕士', '应用心理专硕', '直博'], directions: ['工程心理', '认知神经', '应用心理'], openAt: null, deadline: '2026-09-10T17:00:00+08:00', deadlinePrecision: 'minute', eventDates: '院系后续通知', description: '心理学、应用心理及直博申请统一通过浙江大学推免报名系统提交，截止 9 月 10 日 17:00。', requirements: ['有望获得推免资格', '按系统要求上传成绩、排名及外语等材料'], sourceUrl: 'https://yjsy.zju.edu.cn/open/zsss/ZsssBksmOpenList?nf=2027&bksmlx=2' }),
+  current({ id: 'nnu-2027', school: '南京师范大学', institute: '心理学院', title: '2027 年接收推免生预报名', type: '预推免', tiers: ['211', '双一流'], province: '江苏', degrees: ['学术型硕士', '应用心理专硕'], directions: ['基础心理', '发展教育', '临床咨询'], openAt: '2026-07-20T00:00:00+08:00', deadline: '2026-09-20T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '学院另行通知', description: '学校推免预报名系统开放期暂定为 7 月 20 日至 9 月 20 日；只明确到日期，具体关闭时刻请以系统为准。', requirements: ['有望取得推免资格', '通过南京师范大学推免预报名系统提交'], sourceUrl: 'https://yz.njnu.edu.cn/sstm/' }),
+  current({ id: 'seu-2027', school: '东南大学', institute: '人文学院', title: '2027 年推免预报名（心理学相关专业）', type: '预推免', tiers: ['985', '211', '双一流'], province: '江苏', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理', '社会心理'], openAt: '2026-07-10T12:00:00+08:00', deadline: '2026-08-08T12:00:00+08:00', deadlinePrecision: 'minute', eventDates: '学院后续通知', description: '东南大学学校通知列明人文学院预报名窗口为 7 月 10 日 12:00 至 8 月 8 日 12:00，当前已截止。', requirements: ['预计取得推免资格', '按学校系统和学院要求提交材料'], sourceUrl: 'https://yzb.seu.edu.cn/2026/0707/c6676a575749/page.htm' }),
+  current({ id: 'suda-2027', school: '苏州大学', institute: '教育学院', title: '2027 年推免接收信息（待院系公布）', type: '推免接收', tiers: ['211', '双一流'], province: '江苏', degrees: ['学术型硕士', '应用心理专硕'], directions: ['发展教育', '应用心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注苏州大学研究生报考服务系统', '最终招生专业以 2027 招生目录为准'], sourceUrl: 'https://jyxy.suda.edu.cn/' }),
+  current({ id: 'whu-2027', school: '武汉大学', institute: '前沿交叉学科研究院心理学系', title: '2027 年接收推荐免试研究生预报名', type: '预推免', tiers: ['985', '211', '双一流'], province: '湖北', degrees: ['学术型硕士', '直博'], directions: ['基础心理', '认知神经', '社会心理'], openAt: '2026-08-24T00:00:00+08:00', deadline: '2026-09-09T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '学院后续通知', description: '招收 040200 心理学学硕，并可选拔直博生。通知仅明确截止到 9 月 9 日，未写具体时刻。', requirements: ['预计取得推免资格', '按学院通知完成线上申请'], sourceUrl: 'https://aais.whu.edu.cn/info/2021/21561.htm' }),
+  current({ id: 'ccnu-2027', school: '华中师范大学', institute: '心理学院', title: '2027 年接收推免生预报名', type: '预推免', tiers: ['211', '双一流'], province: '湖北', degrees: ['学术型硕士', '心理健康教育'], directions: ['认知神经', '社会心理', '发展教育', '临床咨询', '工程心理'], openAt: '2026-09-03T08:00:00+08:00', deadline: '2026-09-11T18:00:00+08:00', deadlinePrecision: 'minute', eventDates: '学院另行通知', description: '覆盖心理学（040200）和心理健康教育（045116），报名系统开放至 9 月 11 日 18:00。', requirements: ['预计获得推免资格', '在华中师范大学推免预报名系统提交'], sourceUrl: 'https://psych.ccnu.edu.cn/info/1059/17780.htm' }),
+  current({ id: 'cug-2027', school: '中国地质大学（武汉）', institute: '马克思主义学院应用心理学研究所', title: '2027 年推免接收信息（待院系公布）', type: '推免接收', tiers: ['211', '双一流'], province: '湖北', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理', '社会心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注学校研招网及培养单位通知', '最终专业以 2027 招生目录为准'], sourceUrl: 'https://yz.cug.edu.cn/' }),
+  current({ id: 'xmu-2027', school: '厦门大学', institute: '教育研究院', title: '2027 年接收推免生预报名（教育心理学）', type: '预推免', tiers: ['985', '211', '双一流'], province: '福建', degrees: ['学术型硕士'], directions: ['发展教育'], openAt: '2026-07-01T00:00:00+08:00', deadline: '2026-07-05T12:00:00+08:00', deadlinePrecision: 'minute', eventDates: '院系后续通知', description: '教育研究院招生专业中包含教育心理学，网上报名及邮件材料均于 7 月 5 日 12:00 截止。', requirements: ['有望取得推免资格', '同时完成系统报名与邮件材料提交'], sourceUrl: 'https://ihe.xmu.edu.cn/info/1311/42902.htm' }),
+  current({ id: 'sysu-2027', school: '中山大学', institute: '心理学系', title: '2027 年接收推荐免试研究生预报名', type: '预推免', tiers: ['985', '211', '双一流'], province: '广东', degrees: ['学术型硕士', '应用心理专硕'], directions: ['基础心理', '认知神经', '应用心理'], openAt: '2026-08-08T00:00:00+08:00', deadline: '2026-08-20T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '院系后续通知', description: '心理学系预报名期为 8 月 8 日至 8 月 20 日；通知未注明具体关闭时刻，当前已截止。', requirements: ['预计取得推免资格', '按中山大学研究生招生系统要求提交'], sourceUrl: 'https://graduate.sysu.edu.cn/zsw/' }),
+  current({ id: 'scnu-2027', school: '华南师范大学', institute: '心理学院', title: '2027 年推免接收信息（系统时间为准）', type: '推免接收', tiers: ['211', '双一流'], province: '广东', degrees: ['学术型硕士', '应用心理专硕'], directions: ['基础心理', '发展教育', '应用心理', '临床咨询'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: '学校 2027 推免预报名系统已提供各单位开放时间查询；心理学院截止时刻请以系统实时显示为准。', requirements: ['预计取得推免资格', '在华南师范大学推免预报名系统完成申请'], sourceUrl: 'https://yanzhao.scnu.edu.cn/MasterTm/OpenTime.aspx' }),
+  current({ id: 'cqu-2027', school: '重庆大学', institute: '心理学相关招生单位', title: '2027 年推免生预报名', type: '预推免', tiers: ['985', '211', '双一流'], province: '重庆', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理'], openAt: '2026-06-23T10:00:00+08:00', deadline: '2026-09-30T18:00:00+08:00', deadlinePrecision: 'minute', eventDates: '各学院自定', description: '学校预报名系统开放至 9 月 30 日 18:00，但各学院可自行设置更早时间，务必同时核对招生单位通知。', requirements: ['预计取得推免资格', '学校系统与学院要求均须满足'], sourceUrl: 'https://yz.cqu.edu.cn/news/2026-06/2553.html' }),
+  current({ id: 'swu-2027', school: '西南大学', institute: '心理学部', title: '2027 年推免接收信息（待学部公布）', type: '推免接收', tiers: ['211', '双一流'], province: '重庆', degrees: ['学术型硕士', '直博'], directions: ['基础心理', '发展教育', '应用心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: '截至核验日未检索到学部 2027 推免截止时间。学部已公告：2027 年应用心理专硕仅招非全日制定向生，是否接收推免须以最新招生目录为准。', requirements: ['关注心理学部研究生招生栏目', '核对 2027 招生目录中的学习方式'], sourceUrl: 'https://psy.swu.edu.cn/info/1085/4758.htm' }),
+  current({ id: 'nankai-2027', school: '南开大学', institute: '社会学院社会心理学系', title: '2027 级推荐免试研究生预报名（不含直博）', type: '预推免', tiers: ['985', '211', '双一流'], province: '天津', degrees: ['学术型硕士', '应用心理专硕'], directions: ['社会心理', '应用心理'], openAt: null, deadline: '2026-09-11T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '学院后续通知', description: '社会学院已发布 2027 级预报名通知，本轮不含直博；截止日按学院通知记录为 9 月 11 日，具体时刻未注明。', requirements: ['预计取得推免资格', '按社会学院要求提交申请材料'], sourceUrl: 'https://shxy.nankai.edu.cn/info/1874/2840.htm' }),
+  current({ id: 'tju-2027', school: '天津大学', institute: '教育学院心理学相关专业', title: '2027 年推免生预报名', type: '预推免', tiers: ['985', '211', '双一流'], province: '天津', degrees: ['学术型硕士'], directions: ['应用心理', '发展教育'], openAt: '2026-07-07T12:00:00+08:00', deadline: '2026-09-20T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '学院自定', description: '学校预报名系统开放至 9 月 20 日，各学院可有独立安排；心理学相关专业须以系统可选专业和学院通知为准。', requirements: ['预计取得推免资格', '同时核对学院具体考核安排'], sourceUrl: 'https://yzb.tju.edu.cn/xwzx/tkss_xw/202607/t20260702_324675.htm' }),
+  current({ id: 'sdu-2027', school: '山东大学', institute: '哲学与社会发展学院心理学相关专业', title: '2027 年推免预报名（学院截止以系统为准）', type: '预推免', tiers: ['985', '211', '双一流'], province: '山东', degrees: ['学术型硕士', '应用心理专硕'], directions: ['社会心理', '应用心理'], openAt: '2026-09-01T09:00:00+08:00', deadline: null, deadlinePrecision: 'unknown', eventDates: '招生单位自定', description: '山东大学推免预报名系统已于 9 月 1 日 09:00 开放，各招生单位自行确定关闭时间。', requirements: ['预计取得推免资格', '通过山东大学推免预报名系统申请'], sourceUrl: 'https://yz.sdu.edu.cn/info/1022/1463.htm' }),
+  current({ id: 'csu-2027', school: '中南大学', institute: '心理学相关招生单位', title: '2027 年推免预报名（院系截止待公布）', type: '预推免', tiers: ['985', '211', '双一流'], province: '湖南', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理', '临床咨询'], openAt: '2026-08-28T00:00:00+08:00', deadline: null, deadlinePrecision: 'unknown', eventDates: '各二级单位自定', description: '学校推免预报名系统已于 8 月 28 日开放，二级单位自行确定截止时间。心理学相关项目请以系统可选专业为准。', requirements: ['预计取得推免资格', '同步查看二级单位招生通知'], sourceUrl: 'https://yz.csu.edu.cn/info/1009/1528.htm' }),
+  current({ id: 'hunnu-2027', school: '湖南师范大学', institute: '教育科学学院', title: '2027 年推免接收信息（待学院公布）', type: '推免接收', tiers: ['211', '双一流'], province: '湖南', degrees: ['学术型硕士', '应用心理专硕', '心理健康教育'], directions: ['基础心理', '发展教育', '应用心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注研究生院和教育科学学院通知', '最终专业与名额以 2027 目录为准'], sourceUrl: 'https://yjsy.hunnu.edu.cn/' }),
+  current({ id: 'scu-2027', school: '四川大学', institute: '公共管理学院心理学相关专业', title: '2027 年推免接收信息（待学院公布）', type: '推免接收', tiers: ['985', '211', '双一流'], province: '四川', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理', '社会心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注四川大学研招网及公共管理学院通知', '最终专业以 2027 招生目录为准'], sourceUrl: 'https://yz.scu.edu.cn/' }),
+  current({ id: 'uestc-2027', school: '电子科技大学', institute: '生命科学与技术学院心理学系', title: '2027 年推免接收信息（待学院公布）', type: '推免接收', tiers: ['985', '211', '双一流'], province: '四川', degrees: ['学术型硕士'], directions: ['认知神经', '基础心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注电子科技大学研招网及生命学院通知', '最终专业以 2027 招生目录为准'], sourceUrl: 'https://yz.uestc.edu.cn/' }),
+  current({ id: 'snnu-2027', school: '陕西师范大学', institute: '心理学院', title: '2027 年推免接收信息（待学院公布）', type: '推免接收', tiers: ['211', '双一流'], province: '陕西', degrees: ['学术型硕士', '应用心理专硕', '心理健康教育'], directions: ['基础心理', '发展教育', '应用心理', '临床咨询'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注心理学院通知公告', '最终专业与名额以 2027 目录为准'], sourceUrl: 'https://psych.snnu.edu.cn/Notice/tzgg.htm' }),
+  current({ id: 'nenu-2027', school: '东北师范大学', institute: '心理学院', title: '2027 年推免接收信息（待学院公布）', type: '推免接收', tiers: ['211', '双一流'], province: '吉林', degrees: ['学术型硕士', '应用心理专硕'], directions: ['基础心理', '发展教育', '应用心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注学校预报名系统和心理学院通知', '最终专业以 2027 招生目录为准'], sourceUrl: 'https://yz.nenu.edu.cn/ybm' }),
+  current({ id: 'ncu-2027', school: '南昌大学', institute: '公共政策与管理学院心理学相关专业', title: '2027 年推免接收信息（待学院公布）', type: '推免接收', tiers: ['211', '双一流'], province: '江西', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理', '社会心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注学校研招网和学院通知', '最终专业以 2027 招生目录为准'], sourceUrl: 'https://yjsy.ncu.edu.cn/' }),
+  current({ id: 'zzu-2027', school: '郑州大学', institute: '教育学院心理学相关专业', title: '2027 年推免接收信息（待学院公布）', type: '推免接收', tiers: ['211', '双一流'], province: '河南', degrees: ['学术型硕士', '应用心理专硕'], directions: ['发展教育', '应用心理'], openAt: null, deadline: null, deadlinePrecision: 'unknown', eventDates: '待公布', description: pending, requirements: ['关注郑州大学研究生院和教育学院通知', '最终专业以 2027 招生目录为准'], sourceUrl: 'https://gs.zzu.edu.cn/' }),
+  current({ id: 'cas-psych-2027', school: '中国科学院大学', institute: '中国科学院心理研究所', title: '2027 年招收推免硕士研究生（直博生）', type: '推免接收', tiers: ['科研院所', '双一流'], province: '北京', degrees: ['学术型硕士', '应用心理专硕', '直博'], directions: ['基础心理', '认知神经', '发展教育', '社会心理', '工程心理'], openAt: '2026-08-25T00:00:00+08:00', deadline: '2026-09-02T16:00:00+08:00', deadlinePrecision: 'minute', eventDates: '预计 2026 年 9 月 22—23 日考核', description: '作为 985/211 范围外的重要心理学科研院所补充收录。问卷、国科大系统及电子材料均须按通知完成。', requirements: ['须取得推免资格', '9 月 2 日 16:00 前完成问卷并提交材料', '申请前与拟报考导师沟通'], sourceUrl: 'https://psych.cas.cn/edu/zsxx/sszs/202608/t20260825_8265209.html' }),
+  { id: 'demo-bnu-camp', source: 'camp2027', school: '北京师范大学', institute: '心理学部', title: '2026 年优秀大学生夏令营（演示）', type: '夏令营', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['学术型硕士', '直博'], directions: ['基础心理', '发展教育'], openAt: '2026-05-20T09:00:00+08:00', deadline: '2026-06-12T17:00:00+08:00', deadlinePrecision: 'minute', eventDates: '2026 年 7 月（演示）', description: '历史演示条目，不代表真实通知。', requirements: ['面向 2027 届本科生（演示）'], sourceUrl: null, verifiedAt: '2026-06-12', demo: true },
+  { id: 'demo-ecnu-camp', source: 'camp2027', school: '华东师范大学', institute: '心理与认知科学学院', title: '2026 年优秀大学生夏令营（演示）', type: '夏令营', tiers: ['985', '211', '双一流'], province: '上海', degrees: ['学术型硕士', '应用心理专硕'], directions: ['应用心理', '临床咨询'], openAt: '2026-05-18T09:00:00+08:00', deadline: '2026-06-16T23:59:59+08:00', deadlinePrecision: 'day', eventDates: '2026 年 7 月（演示）', description: '历史演示条目，不代表真实通知。', requirements: ['面向 2027 届本科生（演示）'], sourceUrl: null, verifiedAt: '2026-06-16', demo: true },
+  { id: 'demo-bnu-archive', source: 'archive2026', school: '北京师范大学', institute: '心理学部', title: '2025 年推免接收（历史演示）', type: '推免接收', tiers: ['985', '211', '双一流'], province: '北京', degrees: ['学术型硕士', '直博'], directions: ['基础心理', '发展教育'], openAt: '2025-08-25T09:00:00+08:00', deadline: '2025-09-10T17:00:00+08:00', deadlinePrecision: 'minute', eventDates: '已结束', description: '用于验证历史数据源切换。', requirements: ['历史演示条目'], sourceUrl: null, verifiedAt: '2025-09-10', demo: true },
 ];

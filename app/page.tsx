@@ -35,8 +35,8 @@ type ProgramStatus = 'open' | 'upcoming' | 'closed' | 'unknown';
 
 const tierOptions = ['985', '211', '双一流', '科研院所', '普通高校'];
 const directionOptions = ['基础心理', '发展教育', '应用心理', '临床咨询', '认知神经', '心理统计', '工程心理', '社会心理'];
-const provinceOptions = ['北京', '上海', '浙江', '江苏', '重庆', '湖北'];
-const degreeOptions: DegreeType[] = ['学术型硕士', '应用心理专硕', '直博'];
+const provinceOptions = ['北京', '上海', '天津', '重庆', '浙江', '江苏', '福建', '山东', '湖北', '湖南', '广东', '四川', '陕西', '吉林', '江西', '河南'];
+const degreeOptions: DegreeType[] = ['学术型硕士', '应用心理专硕', '心理健康教育', '直博'];
 const statusOptions: { value: ProgramStatus; label: string }[] = [
   { value: 'open', label: '报名中' },
   { value: 'upcoming', label: '即将开始' },
@@ -242,7 +242,7 @@ export default function Home() {
               {label}<span className={scope === value ? 'text-primary-foreground/70' : 'text-muted-foreground'}>{scopeCounts[value]}</span>
             </Button>
           ))}
-          <div className="ml-auto flex shrink-0 items-center gap-2 text-xs text-muted-foreground"><span className="size-1.5 rounded-full bg-amber-500" />演示数据 · 等待正式核验</div>
+          <div className="ml-auto flex shrink-0 items-center gap-2 text-xs text-muted-foreground"><span className="size-1.5 rounded-full bg-emerald-500" />官网核验 · 更新至 2026-09-04</div>
         </div>
       </section>
 
@@ -280,7 +280,7 @@ export default function Home() {
 
           <div className="mt-5 flex gap-2 rounded-xl border border-dashed bg-muted/35 px-4 py-3 text-xs leading-5 text-muted-foreground">
             <Info className="mt-0.5 size-4 shrink-0" />
-            <p>当前条目仅用于功能演示，不代表院校真实招生安排。正式数据上线后，每条记录都会附官方来源和最近核验时间；申请前仍需以招生单位通知与报名系统为准。</p>
+            <p>2027 预推免数据优先采用院系官网、学校研招网和官方报名系统。未查到本年度明确截止时刻的院校标记为“待公布”，不会用往年日期代替；提交申请前仍请打开详情中的官方来源复核。</p>
           </div>
         </section>
       </div>
@@ -429,7 +429,7 @@ function ProgramDetail({ program, now, onClose }: { program: Program | null; now
     <OverlayPanel open={Boolean(program)} side="right" title={program?.school ?? ''} description={program ? `${program.institute} · ${program.title}` : ''} onClose={onClose} width="sm:max-w-xl" hideDefaultHeader footer={program && <div className="grid gap-2"><div className="flex justify-end">{program.sourceUrl ? <Button onClick={() => window.open(program.sourceUrl!, '_blank', 'noopener,noreferrer')}><ExternalLink />查看官方通知</Button> : <Button disabled><ExternalLink />暂无官方通知</Button>}</div><p className="text-center text-[11px] text-muted-foreground">最近核验：{program.verifiedAt}</p></div>}>
         {program && <>
           <div className="border-b p-5 pr-14">
-            <div className="mb-2 flex flex-wrap gap-2"><Badge variant="outline" className={statusMeta[getStatus(program, now)].className}>{statusMeta[getStatus(program, now)].label}</Badge><Badge variant="secondary">{program.type}</Badge><Badge variant="outline">演示数据</Badge></div>
+            <div className="mb-2 flex flex-wrap gap-2"><Badge variant="outline" className={statusMeta[getStatus(program, now)].className}>{statusMeta[getStatus(program, now)].label}</Badge><Badge variant="secondary">{program.type}</Badge><Badge variant="outline">{program.demo ? '演示数据' : '官网核验'}</Badge></div>
             <h2 className="text-xl font-bold leading-tight">{program.school}</h2>
             <p className="mt-1 text-sm leading-6 text-muted-foreground">{program.institute}<br />{program.title}</p>
           </div>
@@ -446,8 +446,8 @@ function ProgramDetail({ program, now, onClose }: { program: Program | null; now
               <DetailRow label="活动时间" value={program.eventDates} />
             </DetailSection>
             <DetailSection title="说明"><p className="text-sm leading-7 text-muted-foreground">{program.description}</p></DetailSection>
-            <DetailSection title="申请条件（演示）"><ul className="space-y-2 text-sm text-muted-foreground">{program.requirements.map((requirement) => <li key={requirement} className="flex gap-2"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />{requirement}</li>)}</ul></DetailSection>
-            <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200">该条目是界面演示数据，没有对应的招生通知。正式条目会在这里显示官方来源、发布时间与最近核验时间。</div>
+            <DetailSection title={program.demo ? '申请条件（演示）' : '申请提示'}><ul className="space-y-2 text-sm text-muted-foreground">{program.requirements.map((requirement) => <li key={requirement} className="flex gap-2"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />{requirement}</li>)}</ul></DetailSection>
+            {program.demo ? <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200">该条目是界面演示数据，没有对应的招生通知。</div> : <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-xs leading-5 text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200">本条目已核对官方来源。招生单位可能临时调整安排，请在提交前再次打开官方通知确认。</div>}
           </div>
         </>}
       </OverlayPanel>
