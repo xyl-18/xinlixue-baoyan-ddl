@@ -13,14 +13,13 @@ import { DegreeType, Program, VerificationLevel, programs, sourceLabels } from '
 type ViewMode = 'list' | 'calendar';
 type TimeScope = 'week' | 'month' | 'all';
 type ProgramStatus = 'open' | 'upcoming' | 'closed' | 'unknown';
-type SourceMode = 'college' | 'all' | 'watchlist';
+type SourceMode = 'all';
 
 const tierOptions = ['985', '211', '双一流', '科研院所', '普通高校'];
 // 方向选项直接由院系数据生成，避免筛选标签与数据表中的专业方向脱节。
 const directionOptions = Array.from(new Set(programs.flatMap((program) => program.directions))).sort((a, b) => a.localeCompare(b, 'zh-CN'));
 const provinceOptions = ['北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆'];
-const degreeOptions: DegreeType[] = ['学术型硕士', '应用心理专硕', '心理健康教育', '直博'];
-const verificationOptions: VerificationLevel[] = ['college_notice', 'official_system', 'school_notice', 'watchlist'];
+const degreeOptions: DegreeType[] = ['心理学（040200）', '应用心理（045400）', '心理健康教育（045116）', '教育心理学', '直博'];
 const statusOptions: ProgramStatus[] = ['open', 'upcoming', 'unknown', 'closed'];
 
 const statusMeta: Record<ProgramStatus, { label: string; tone: string }> = {
@@ -32,9 +31,6 @@ const statusMeta: Record<ProgramStatus, { label: string; tone: string }> = {
 
 const verificationMeta: Record<VerificationLevel, { label: string; short: string; tone: string }> = {
   college_notice: { label: '学院正式通知', short: '学院通知', tone: 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:text-emerald-300 dark:bg-emerald-950/50 dark:border-emerald-900' },
-  official_system: { label: '官方报名系统', short: '报名系统', tone: 'text-cyan-700 bg-cyan-50 border-cyan-200 dark:text-cyan-300 dark:bg-cyan-950/50 dark:border-cyan-900' },
-  school_notice: { label: '学校级公告', short: '学校公告', tone: 'text-violet-700 bg-violet-50 border-violet-200 dark:text-violet-300 dark:bg-violet-950/50 dark:border-violet-900' },
-  watchlist: { label: '院系待跟踪', short: '待跟踪', tone: 'text-amber-700 bg-amber-50 border-amber-200 dark:text-amber-300 dark:bg-amber-950/50 dark:border-amber-900' },
 };
 
 const initialClock = new Date('2026-09-04T00:00:00+08:00').getTime();
@@ -71,7 +67,7 @@ export default function Home() {
       const nextMode = params.get('mode');
       const nextScope = params.get('scope');
       if (nextView === 'list' || nextView === 'calendar') setView(nextView);
-      if (nextMode === 'college' || nextMode === 'all' || nextMode === 'watchlist') setSourceMode(nextMode);
+      if (nextMode === 'all') setSourceMode(nextMode);
       if (nextScope === 'week' || nextScope === 'month' || nextScope === 'all') setScope(nextScope);
       setQuery(params.get('q') ?? '');
       setTiers(parseParam(params.get('tiers')));
@@ -95,7 +91,6 @@ export default function Home() {
     if (!urlReady) return;
     const params = new URLSearchParams();
     if (view !== 'list') params.set('view', view);
-    if (sourceMode !== 'college') params.set('mode', sourceMode);
     if (scope !== 'all') params.set('scope', scope);
     if (query) params.set('q', query);
     if (tiers.length) params.set('tiers', tiers.join(','));
@@ -124,7 +119,7 @@ export default function Home() {
     return () => window.removeEventListener('keydown', onKey);
   }, [view]);
 
-  const modeRows = useMemo(() => programs.filter((program) => sourceMode === 'college' ? program.verificationLevel === 'college_notice' : sourceMode === 'watchlist' ? program.verificationLevel === 'watchlist' : true), [sourceMode]);
+  const modeRows = programs;
 
   const visibleRows = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -145,7 +140,7 @@ export default function Home() {
 
   const selected = programs.find((program) => program.id === selectedId) ?? null;
   const activeFilterCount = tiers.length + directions.length + provinces.length + degrees.length + statuses.length + verifications.length;
-  const modeCounts = useMemo(() => ({ college: programs.filter((row) => row.verificationLevel === 'college_notice').length, all: programs.length, watchlist: programs.filter((row) => row.verificationLevel === 'watchlist').length }), []);
+  const modeCounts = useMemo(() => ({ all: programs.length }), []);
   const scopeCounts = useMemo(() => ({ week: countInDays(modeRows, now, 7), month: countInDays(modeRows, now, 30), all: modeRows.filter((program) => getStatus(program, now) !== 'closed').length }), [modeRows, now]);
 
   const clearFilters = () => { setQuery(''); setTiers([]); setDirections([]); setProvinces([]); setDegrees([]); setStatuses([]); setVerifications([]); setScope('all'); };
@@ -181,8 +176,8 @@ export default function Home() {
     </header>
 
     <section className="border-b bg-card"><div className="mx-auto flex max-w-[1500px] items-center gap-2 overflow-x-auto px-4 py-3 md:px-7">
-      {([['college', '学院通知'], ['all', '全部来源'], ['watchlist', '待跟踪']] as [SourceMode, string][]).map(([value, label]) => <Button key={value} size="sm" variant={sourceMode === value ? 'default' : 'outline'} className="rounded-full px-3" onClick={() => { setSourceMode(value); setScope('all'); }} aria-pressed={sourceMode === value}>{label}<span className={sourceMode === value ? 'text-primary-foreground/70' : 'text-muted-foreground'}>{modeCounts[value]}</span></Button>)}
-      <div className="ml-auto flex shrink-0 items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="size-3.5 text-emerald-600" />逐条标注来源层级 · 2026-09-04</div>
+      <Button size="sm" className="rounded-full px-3" aria-pressed="true">学院官方通知 <span className="text-primary-foreground/70">{modeCounts.all}</span></Button>
+      <div className="ml-auto flex shrink-0 items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="size-3.5 text-emerald-600" />仅收录学院/研究院原文 · 2026-09-04</div>
     </div></section>
 
     <div className="mx-auto grid max-w-[1500px] grid-cols-1 md:grid-cols-[238px_minmax(0,1fr)]">
@@ -195,10 +190,10 @@ export default function Home() {
 
         {(chips.length > 0 || query) && <div className="mt-3 flex flex-wrap items-center gap-1.5 rounded-xl border bg-card px-3 py-2"><span className="mr-1 text-xs text-muted-foreground">已选</span>{query && <button className="filter-chip" onClick={() => setQuery('')}>关键词：{query}<X /></button>}{chips.map((chip) => <button key={`${chip.kind}-${chip.value}`} className="filter-chip" onClick={() => removeChip(chip.kind, chip.value)}>{chip.label}<X /></button>)}<button className="ml-auto text-xs text-primary hover:underline" onClick={clearFilters}>清除全部</button></div>}
 
-        <div className="mt-6"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{sourceMode === 'college' ? 'Exact college notices' : sourceMode === 'watchlist' ? 'Tracking queue' : 'All verified sources'}</p><h1 className="mt-1 text-2xl font-bold tracking-tight">{view === 'calendar' ? formatMonth(calendarCursor) : sourceMode === 'college' ? '学院级推免通知' : sourceMode === 'watchlist' ? '待跟踪招生单位' : '全部心理学推免信息'}</h1><p className="mt-1 text-sm text-muted-foreground">每一行对应一个明确的学院、学部或研究院；学校公告不会冒充学院截止。</p></div>
+        <div className="mt-6"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Verified college notices only</p><h1 className="mt-1 text-2xl font-bold tracking-tight">{view === 'calendar' ? formatMonth(calendarCursor) : '心理学学院级推免通知'}</h1><p className="mt-1 text-sm text-muted-foreground">每一行都定位到具体学院、学部或研究院的官方通知；学校级公告和推测记录不收录。</p></div>
 
         {view === 'list' ? <ProgramList rows={visibleRows} now={now} selectedId={selectedId} onSelect={setSelectedId} /> : <CalendarView rows={visibleRows} now={now} cursor={calendarCursor} onCursor={setCalendarCursor} onSelect={setSelectedId} />}
-        <div className="mt-5 flex gap-2 rounded-xl border border-dashed bg-muted/35 px-4 py-3 text-xs leading-5 text-muted-foreground"><Info className="mt-0.5 size-4 shrink-0" /><p><strong className="text-foreground">数据边界：</strong>“学院通知”只收录具体招生单位发布的正文；学校级公告、报名系统和仅有栏目入口的信息分别标注。未找到具体学院通知时只进入“待跟踪”，不生成推测截止时间。</p></div>
+        <div className="mt-5 flex gap-2 rounded-xl border border-dashed bg-muted/35 px-4 py-3 text-xs leading-5 text-muted-foreground"><Info className="mt-0.5 size-4 shrink-0" /><p><strong className="text-foreground">收录规则：</strong>仅收录能定位到具体学院、学部或研究院官网的 2027 通知。学校级公告、招生目录、往年通知和无法核验的培养单位均不展示；未写截止时刻的学院通知只显示“截止未公布”。</p></div>
       </section>
     </div>
 
@@ -241,8 +236,7 @@ function CalendarView({ rows, now, cursor, onCursor, onSelect }: { rows: Program
 function FilterPanel(props: { rows: Program[]; now: number; tiers: string[]; setTiers: (value: string[]) => void; directions: string[]; setDirections: (value: string[]) => void; provinces: string[]; setProvinces: (value: string[]) => void; degrees: DegreeType[]; setDegrees: (value: DegreeType[]) => void; statuses: ProgramStatus[]; setStatuses: (value: ProgramStatus[]) => void; verifications: VerificationLevel[]; setVerifications: (value: VerificationLevel[]) => void; onClear: () => void }) {
   const { rows, now } = props;
   return <div><div className="mb-5 flex items-center justify-between"><p className="text-sm font-bold">筛选条件</p><Button variant="ghost" size="xs" onClick={props.onClear}><FilterX />清空</Button></div>
-    <FilterGroup title="来源层级" options={verificationOptions} labels={Object.fromEntries(verificationOptions.map((item) => [item, verificationMeta[item].short]))} selected={props.verifications} onChange={props.setVerifications} count={(value) => rows.filter((row) => row.verificationLevel === value).length} />
-    <FilterGroup className="mt-7" title="院校类型" options={tierOptions} selected={props.tiers} onChange={props.setTiers} count={(value) => rows.filter((row) => row.tiers.includes(value)).length} />
+    <FilterGroup title="院校类型" options={tierOptions} selected={props.tiers} onChange={props.setTiers} count={(value) => rows.filter((row) => row.tiers.includes(value)).length} />
     <FilterGroup className="mt-7" title="状态" options={statusOptions} labels={Object.fromEntries(statusOptions.map((item) => [item, statusMeta[item].label]))} selected={props.statuses} onChange={props.setStatuses} count={(value) => rows.filter((row) => getStatus(row, now) === value).length} />
     <FilterGroup className="mt-7" title="培养类型" options={degreeOptions} selected={props.degrees} onChange={props.setDegrees} count={(value) => rows.filter((row) => row.degrees.includes(value as DegreeType)).length} />
     <FilterGroup className="mt-7" title="专业方向（含专业目录）" options={directionOptions} selected={props.directions} onChange={props.setDirections} count={(value) => rows.filter((row) => row.directions.includes(value)).length} />
@@ -267,7 +261,7 @@ function ProgramDetail({ program, now, onClose }: { program: Program | null; now
 }
 
 function SourceNotice({ level }: { level: VerificationLevel }) {
-  const messages: Record<VerificationLevel, string> = { college_notice: '该记录链接至具体学院、学部或研究院发布的官方通知。提交前仍建议再次核对附件和报名系统。', official_system: '该时间来自学校官方报名系统，但不是学院通知正文；学院可能另设更早截止时间。', school_notice: '该记录来自学校级公告。页面已保留具体招生单位，但学校时间不能替代学院另行发布的截止时间。', watchlist: '该招生单位目前只有官方栏目或学校入口，尚未找到本年度具体学院通知，因此不展示推测截止时间。' };
+  const messages: Record<VerificationLevel, string> = { college_notice: '该记录链接至具体学院、学部或研究院发布的官方通知。提交前仍建议再次核对通知附件和报名系统。' };
   return <div className={`rounded-xl border p-4 text-xs leading-5 ${verificationMeta[level].tone}`}>{messages[level]}</div>;
 }
 
