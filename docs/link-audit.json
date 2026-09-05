@@ -1,0 +1,261 @@
+{
+  "checkedAt": "2026-09-05T09:17:37.209Z",
+  "note": "HTTP checks do not verify publisher, admission eligibility or dates; failures do not prove the notice is absent.",
+  "results": [
+    {
+      "id": "bnu-psy-2027",
+      "school": "北京师范大学",
+      "sourceUrl": "https://yz.bnu.edu.cn/detail/be0e6268-0bfd-4a34-aa31-e72207bf2577",
+      "finalUrl": "https://yz.bnu.edu.cn/detail/be0e6268-0bfd-4a34-aa31-e72207bf2577",
+      "httpStatus": 200,
+      "title": "北京师范大学研究生招生网",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "bnu-psy-summer-2027",
+      "school": "北京师范大学",
+      "sourceUrl": "https://psych.bnu.edu.cn/xwzx/tzgg/1adcf66da8e44dde9a43940ee804bf11.htm",
+      "finalUrl": "https://psych.bnu.edu.cn/xwzx/tzgg/1adcf66da8e44dde9a43940ee804bf11.htm",
+      "httpStatus": 200,
+      "title": "【通知】心理学部2026年优秀大学生夏令营报名通知－通知公告－首页",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "cas-psych-2027",
+      "school": "中国科学院大学",
+      "sourceUrl": "https://psych.cas.cn/edu/zsxx/sszs/202608/t20260825_8265209.html",
+      "finalUrl": "https://psych.cas.cn/edu/zsxx/sszs/202608/t20260825_8265209.html",
+      "httpStatus": 200,
+      "title": "中国科学院心理研究所2027年招收推荐免试攻读硕士研究生（直博生）招生简章--中国科学院心理研究所",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "ccnu-psy-2027",
+      "school": "华中师范大学",
+      "sourceUrl": "https://psych.ccnu.edu.cn/info/1059/17780.htm",
+      "finalUrl": "https://psych.ccnu.edu.cn/info/1059/17780.htm",
+      "httpStatus": 200,
+      "title": "华中师范大学心理学院2027年接收优秀应届本科毕业生免试攻读研究生预报名通知-华中师范大学心理学院",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "cufe-ssp-2027",
+      "school": "中央财经大学",
+      "sourceUrl": "https://ssp.cufe.edu.cn/info/1065/14728.htm",
+      "finalUrl": "https://ssp.cufe.edu.cn/info/1065/14728.htm",
+      "httpStatus": 200,
+      "title": "中央财经大学社会与心理学院接收2027年推免生工作通知-中央财经大学社会与心理学院",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "ecnu-edu-psy-2027",
+      "school": "华东师范大学",
+      "sourceUrl": "https://ed.ecnu.edu.cn/c4/00/c45914a771072/page.htm",
+      "finalUrl": "https://ed.ecnu.edu.cn/c4/00/c45914a771072/page.htm",
+      "httpStatus": 200,
+      "title": "教育学部2027年接收优秀应届本科毕业生免试攻读研究生  （含本科直博）预报名的通知",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "ecnu-psy-2027",
+      "school": "华东师范大学",
+      "sourceUrl": "https://psy.ecnu.edu.cn/c3/cd/c17481a771021/page.htm",
+      "finalUrl": "https://psy.ecnu.edu.cn/c3/cd/c17481a771021/page.htm",
+      "httpStatus": 200,
+      "title": "心理与认知科学学院2027年接收优秀应届本科毕业生免试攻读研究生（含本科直博）预报名通知",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "ecnu-sii-2027",
+      "school": "华东师范大学",
+      "sourceUrl": "https://sii.ecnu.edu.cn/c6/2d/c52126a771629/page.htm",
+      "finalUrl": "https://sii.ecnu.edu.cn/c6/2d/c52126a771629/page.htm",
+      "httpStatus": 200,
+      "title": "（9月2日更新）推免生预报名公告 | 华东师范大学智能交互学院2027年招收推荐免试攻读研究生",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "fudan-ssdpp-2027",
+      "school": "复旦大学",
+      "sourceUrl": "https://gsao.fudan.edu.cn/fb/0b/c15029a785163/page.htm",
+      "finalUrl": "https://gsao.fudan.edu.cn/fb/0b/c15029a785163/page.htm",
+      "httpStatus": 200,
+      "title": "复旦大学招收2027级推荐免试研究生报名通知",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "hrbeu-shss-2027",
+      "school": "哈尔滨工程大学",
+      "sourceUrl": "https://shss.hrbeu.edu.cn/2026/0904/c9220a351832/page.htm",
+      "finalUrl": "https://shss.hrbeu.edu.cn/2026/0904/c9220a351832/page.htm",
+      "httpStatus": 200,
+      "title": "哈尔滨工程大学人文社会科学学院 2027年推免生预报名和复试工作安排",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "muc-edu-2027",
+      "school": "中央民族大学",
+      "sourceUrl": "https://edu.muc.edu.cn/info/1030/8818.htm",
+      "finalUrl": "https://edu.muc.edu.cn/info/1030/8818.htm",
+      "httpStatus": 200,
+      "title": "教育学院关于2027年接收推荐免试研究生（含直博生）预报名的通知-中央民族大学教育学院",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "nankai-social-2027",
+      "school": "南开大学",
+      "sourceUrl": "https://shxy.nankai.edu.cn/info/1874/2840.htm",
+      "finalUrl": "https://shxy.nankai.edu.cn/info/1874/2840.htm",
+      "httpStatus": 200,
+      "title": "关于接收2027级推荐免试（不含直博）研究生预报名的通知-社会学院",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "nju-social-2027",
+      "school": "南京大学",
+      "sourceUrl": "https://yzb.nju.edu.cn/d4/52/c47863a840786/page.htm",
+      "result": "unreachable_in_this_environment",
+      "error": "fetch failed"
+    },
+    {
+      "id": "pku-psy-2027",
+      "school": "北京大学",
+      "sourceUrl": "https://www.psy.pku.edu.cn/xwzx/tzgg/a353e2b94a004709ab71e0841d95cbe7.htm",
+      "result": "unreachable_in_this_environment",
+      "error": "fetch failed"
+    },
+    {
+      "id": "ruc-psy-2027",
+      "school": "中国人民大学",
+      "sourceUrl": "https://psy.ruc.edu.cn/xwdt/tzgg/efeb9a4f6748498aa5442ecc9e41e258.htm",
+      "finalUrl": "http://psy.ruc.edu.cn/xwdt/tzgg/efeb9a4f6748498aa5442ecc9e41e258.htm",
+      "httpStatus": 200,
+      "title": "中国人民大学心理学系官网psy",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "sjtu-psy-2027",
+      "school": "上海交通大学",
+      "sourceUrl": "https://psychology.sjtu.edu.cn/zsxx/592.html",
+      "result": "unreachable_in_this_environment",
+      "error": "fetch failed"
+    },
+    {
+      "id": "suda-edu-2027",
+      "school": "苏州大学",
+      "sourceUrl": "https://yjs.suda.edu.cn/da/52/c8365a711250/page.htm",
+      "result": "unreachable_in_this_environment",
+      "error": "fetch failed"
+    },
+    {
+      "id": "swu-psy-2027",
+      "school": "西南大学",
+      "sourceUrl": "https://yz.swu.edu.cn/info/1005/3562.htm",
+      "finalUrl": "https://yz.swu.edu.cn/info/1005/3562.htm",
+      "httpStatus": 200,
+      "title": "西南大学关于接收2027年优秀应届本科毕业生推荐免（初）试攻读研究生的预报名通知-西南大学研究生招生网",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "swufe-sfy-2027",
+      "school": "西南财经大学",
+      "sourceUrl": "https://sfy.swufe.edu.cn/info/1078/10089.htm",
+      "finalUrl": "https://sfy.swufe.edu.cn/info/1078/10089.htm",
+      "httpStatus": 200,
+      "title": "西南财经大学社会发展研究院2027级接收推荐免试（推免生）攻读硕士学位研究生工作细则-西南财经大学社会发展研究院",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "sysu-psych-2027",
+      "school": "中山大学",
+      "sourceUrl": "https://mp.weixin.qq.com/s/YdnQZPgIY7faqJ6zI4VAbg",
+      "finalUrl": "https://mp.weixin.qq.com/mp/wappoc_appmsgcaptcha",
+      "httpStatus": 200,
+      "title": "",
+      "contains2027": false,
+      "result": "challenge_needs_manual_review"
+    },
+    {
+      "id": "szu-psy-2027",
+      "school": "深圳大学",
+      "sourceUrl": "https://psy.szu.edu.cn/info/1050/4472.htm",
+      "finalUrl": "https://psy.szu.edu.cn/info/1050/4472.htm",
+      "httpStatus": 200,
+      "title": "深圳大学心理学院2027年接收推荐免试研究生预报名通知-深圳大学心理学院",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "thu-pcs-2027",
+      "school": "清华大学",
+      "sourceUrl": "https://www.pcs.tsinghua.edu.cn/info/1031/2141.htm",
+      "result": "unreachable_in_this_environment",
+      "error": "fetch failed"
+    },
+    {
+      "id": "tju-soe-2027",
+      "school": "天津大学",
+      "sourceUrl": "https://yzb.tju.edu.cn/xwzx/tkss_xw/202607/t20260702_324675.htm",
+      "finalUrl": "https://yzb.tju.edu.cn/xwzx/tkss_xw/202607/t20260702_324675.htm",
+      "httpStatus": 200,
+      "title": "天津大学研究生招生网",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "tongji-humanities-2027",
+      "school": "同济大学",
+      "sourceUrl": "https://sal.tongji.edu.cn/info/1023/4818.htm",
+      "finalUrl": "https://sal.tongji.edu.cn/info/1023/4818.htm",
+      "httpStatus": 200,
+      "title": "同济大学人文学院2027年接收推荐免试硕士研究生预报名通知-同济大学人文学院",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "whu-aais-2027",
+      "school": "武汉大学",
+      "sourceUrl": "https://aais.whu.edu.cn/info/2021/21561.htm",
+      "finalUrl": "https://aais.whu.edu.cn/info/2021/21561.htm",
+      "httpStatus": 200,
+      "title": "武汉大学前沿交叉学科研究院2027年接收推免生预报名通知-武汉大学前沿交叉学科研究院",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "xmu-ihe-2027",
+      "school": "厦门大学",
+      "sourceUrl": "https://ihe.xmu.edu.cn/info/1311/42902.htm",
+      "finalUrl": "https://ihe.xmu.edu.cn/info/1311/42902.htm",
+      "httpStatus": 200,
+      "title": "厦门大学教育研究院关于2027年接收推荐免试研究生（含直博生）预报名的通知-厦门大学教育研究院",
+      "contains2027": true,
+      "result": "reachable_needs_content_review"
+    },
+    {
+      "id": "zju-psych-2027",
+      "school": "浙江大学",
+      "sourceUrl": "https://mp.weixin.qq.com/s/C1-ZOf3Sh5fyBPXr04zLwQ",
+      "finalUrl": "https://mp.weixin.qq.com/mp/wappoc_appmsgcaptcha",
+      "httpStatus": 200,
+      "title": "",
+      "contains2027": false,
+      "result": "challenge_needs_manual_review"
+    }
+  ]
+}

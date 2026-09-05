@@ -11,7 +11,11 @@
     "build:pages": "vite build --config vite.pages.config.ts",
     "start": "wrangler dev --config dist/server/wrangler.json",
     "lint": "oxlint",
-    "format": "oxfmt"
+    "format": "oxfmt",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "check:data": "node --experimental-strip-types scripts/validate-data.mjs",
+    "check:links": "node --experimental-strip-types scripts/check-links.mjs",
+    "typecheck": "tsc --noEmit --incremental false"
   },
   "packageManager": "pnpm@10.28.0",
   "dependencies": {

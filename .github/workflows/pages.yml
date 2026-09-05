@@ -27,6 +27,12 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Validate data and behavior
+        run: |
+          pnpm run check:data
+          pnpm test
+          pnpm run typecheck
+          pnpm run lint
       - name: Build static website
         run: pnpm run build:pages
         env:

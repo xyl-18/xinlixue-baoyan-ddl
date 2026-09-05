@@ -1,0 +1,814 @@
+[
+  {
+    "school": "北京大学",
+    "province": "北京",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "清华大学",
+    "province": "北京",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "中国人民大学",
+    "province": "北京",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "北京航空航天大学",
+    "province": "北京",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京理工大学",
+    "province": "北京",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中国农业大学",
+    "province": "北京",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京师范大学",
+    "province": "北京",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "中央民族大学",
+    "province": "北京",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "南开大学",
+    "province": "天津",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "天津大学",
+    "province": "天津",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "复旦大学",
+    "province": "上海",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "同济大学",
+    "province": "上海",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "上海交通大学",
+    "province": "上海",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "华东师范大学",
+    "province": "上海",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "大连理工大学",
+    "province": "辽宁",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "东北大学",
+    "province": "辽宁",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "吉林大学",
+    "province": "吉林",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "哈尔滨工业大学",
+    "province": "黑龙江",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "南京大学",
+    "province": "江苏",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "东南大学",
+    "province": "江苏",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "浙江大学",
+    "province": "浙江",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "中国科学技术大学",
+    "province": "安徽",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "厦门大学",
+    "province": "福建",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "山东大学",
+    "province": "山东",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中国海洋大学",
+    "province": "山东",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "武汉大学",
+    "province": "湖北",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "华中科技大学",
+    "province": "湖北",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "湖南大学",
+    "province": "湖南",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中南大学",
+    "province": "湖南",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "国防科技大学",
+    "province": "湖南",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中山大学",
+    "province": "广东",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "华南理工大学",
+    "province": "广东",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "四川大学",
+    "province": "四川",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "电子科技大学",
+    "province": "四川",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验：重点核对脑科学/认知神经科学交叉方向"
+  },
+  {
+    "school": "重庆大学",
+    "province": "重庆",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "西安交通大学",
+    "province": "陕西",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验：重点核对健康、康复与认知方向"
+  },
+  {
+    "school": "西北工业大学",
+    "province": "陕西",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验：重点核对航空航天心理学方向"
+  },
+  {
+    "school": "西北农林科技大学",
+    "province": "陕西",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "兰州大学",
+    "province": "甘肃",
+    "tier": "985",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京交通大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京工业大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京科技大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京化工大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京邮电大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京林业大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验：重点核对心理学系"
+  },
+  {
+    "school": "中国传媒大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中央音乐学院",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "对外经济贸易大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京中医药大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京外国语大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中国地质大学（北京）",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中国矿业大学（北京）",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中国石油大学（北京）",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中国政法大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中央财经大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "华北电力大学（北京）",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "北京体育大学",
+    "province": "北京",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验：重点核对运动心理相关培养"
+  },
+  {
+    "school": "天津医科大学",
+    "province": "天津",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "西南大学",
+    "province": "重庆",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "河北工业大学",
+    "province": "河北",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "华北电力大学（保定）",
+    "province": "河北",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "太原理工大学",
+    "province": "山西",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "内蒙古大学",
+    "province": "内蒙古",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "辽宁大学",
+    "province": "辽宁",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "大连海事大学",
+    "province": "辽宁",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "东北师范大学",
+    "province": "吉林",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验：重点核对心理学院"
+  },
+  {
+    "school": "延边大学",
+    "province": "吉林",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "哈尔滨工程大学",
+    "province": "黑龙江",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "东北农业大学",
+    "province": "黑龙江",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "东北林业大学",
+    "province": "黑龙江",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "苏州大学",
+    "province": "江苏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "南京师范大学",
+    "province": "江苏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待链接核验：有校级预报名，尚未找到合格的 2027 院系通知"
+  },
+  {
+    "school": "中国矿业大学",
+    "province": "江苏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中国药科大学",
+    "province": "江苏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "河海大学",
+    "province": "江苏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "南京理工大学",
+    "province": "江苏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "江南大学",
+    "province": "江苏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "南京农业大学",
+    "province": "江苏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "南京航空航天大学",
+    "province": "江苏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "安徽大学",
+    "province": "安徽",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "合肥工业大学",
+    "province": "安徽",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "福州大学",
+    "province": "福建",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "南昌大学",
+    "province": "江西",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中国石油大学（华东）",
+    "province": "山东",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "郑州大学",
+    "province": "河南",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "武汉理工大学",
+    "province": "湖北",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中南财经政法大学",
+    "province": "湖北",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "华中师范大学",
+    "province": "湖北",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "华中农业大学",
+    "province": "湖北",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "中国地质大学（武汉）",
+    "province": "湖北",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "湖南师范大学",
+    "province": "湖南",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验：重点核对心理学院"
+  },
+  {
+    "school": "暨南大学",
+    "province": "广东",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "华南师范大学",
+    "province": "广东",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验：重点核对心理学院"
+  },
+  {
+    "school": "上海外国语大学",
+    "province": "上海",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "上海大学",
+    "province": "上海",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "东华大学",
+    "province": "上海",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "上海财经大学",
+    "province": "上海",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "华东理工大学",
+    "province": "上海",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "海军军医大学",
+    "province": "上海",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "广西大学",
+    "province": "广西",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "西南交通大学",
+    "province": "四川",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "四川农业大学",
+    "province": "四川",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "西南财经大学",
+    "province": "四川",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "旧表记有通知，尚未完成全校院级目录核验"
+  },
+  {
+    "school": "云南大学",
+    "province": "云南",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "贵州大学",
+    "province": "贵州",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "西北大学",
+    "province": "陕西",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "长安大学",
+    "province": "陕西",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "陕西师范大学",
+    "province": "陕西",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验：重点核对心理学院"
+  },
+  {
+    "school": "西安电子科技大学",
+    "province": "陕西",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "空军军医大学",
+    "province": "陕西",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "海南大学",
+    "province": "海南",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "宁夏大学",
+    "province": "宁夏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "青海大学",
+    "province": "青海",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "西藏大学",
+    "province": "西藏",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "新疆大学",
+    "province": "新疆",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  },
+  {
+    "school": "石河子大学",
+    "province": "新疆",
+    "tier": "211",
+    "reviewStatus": "pending",
+    "note": "待目录与通知核验"
+  }
+]
