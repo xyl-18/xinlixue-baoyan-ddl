@@ -304,7 +304,7 @@ function OverlayPanel({ open, side, title, description, onClose, children, foote
 function EmptyState() { return <div className="mt-4 grid min-h-64 place-items-center rounded-2xl border border-dashed bg-card p-8 text-center"><div><div className="mx-auto grid size-12 place-items-center rounded-2xl bg-muted"><Search className="size-5 text-muted-foreground" /></div><h2 className="mt-4 font-bold">没有匹配的学院通知</h2><p className="mt-1 text-sm text-muted-foreground">尝试清除部分筛选，或切换招生批次与通知来源。</p></div></div>; }
 function CoverageNotice() {
   return <details className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100">
-    <summary className="cursor-pointer font-semibold">覆盖核验未完成 · {coverageSummary.total} 个院校核验对象中，{coverageSummary.withRecords} 个已有部分记录</summary>
+    <summary className="cursor-pointer font-semibold">截至 2026-09-05 的 {coverageSummary.total} 校核验台账 · {coverageSummary.withRecords} 校已有2027记录</summary>
     <p className="mt-2">已有记录不等于全校覆盖。学院、专业目录、招生批次均需逐项核实；没有收录不代表没有招生。校级线索、夏令营和附件外补充信息不能代替目标专业的学院预推免通知。</p>
     <p className="mt-2">附件专业代码：{subjectCatalog.map(s => s.code).join('、')}。自设专业须同时核对代码和名称；目前尚未完成全部代码与学院的对应核验。</p>
     <ul className="mt-3 space-y-2">{collegeCandidates.map(unit => <li key={`${unit.school}-${unit.institute}`}><a className="underline" href={unit.source} target="_blank" rel="noreferrer">{unit.school} · {unit.institute}</a>：{unit.note}</li>)}</ul>
