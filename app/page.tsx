@@ -3,7 +3,7 @@
 /* oxlint-disable react/react-compiler -- URL and theme state are hydrated from browser-only storage after mount. */
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { ArrowLeft, ArrowRight, BrainCircuit, Building2, CalendarClock, CalendarDays, CheckCircle2, CircleHelp, Clock3, ExternalLink, FilterX, GraduationCap, Info, Link2, List, MapPin, Moon, Search, ShieldCheck, SlidersHorizontal, Sun, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BrainCircuit, Building2, CalendarClock, CalendarDays, CheckCircle2, CircleHelp, Clock3, ExternalLink, FilterX, GraduationCap, Info, Link2, List, MapPin, Moon, Search, ShieldCheck, SlidersHorizontal, Sun, University, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,11 +11,11 @@ import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { DegreeType, Program, VerificationLevel, programs, sourceLabels } from '@/lib/programs';
 import { subjectCatalog } from '@/lib/subject-catalog';
 import { matchesSubject, subjectEvidence } from '@/lib/subject-evidence';
-import { coverageSummary, universityCoverage } from '@/lib/coverage';
+import { coverageSummary, universityCoverage, universityDirectory } from '@/lib/coverage';
 import { collegeCandidates } from '@/lib/college-candidates';
 import { chinaDateKey, validParams, getStatus, formatDeadline, formatDateTime, type ProgramStatus } from '@/lib/deadline';
 
-type ViewMode = 'list' | 'calendar';
+type ViewMode = 'directory' | 'list' | 'calendar';
 type TimeScope = 'week' | 'month' | 'all';
 type SourceMode = 'all' | '夏令营' | '预推免' | '推免接收' | '直博选拔';
 const sourceModes: SourceMode[] = ['all', '夏令营', '预推免', '推免接收', '直博选拔'];
@@ -43,7 +43,7 @@ const initialClock = new Date('2026-09-04T00:00:00+08:00').getTime();
 
 export default function Home() {
   const [now, setNow] = useState(initialClock);
-  const [view, setView] = useState<ViewMode>('list');
+  const [view, setView] = useState<ViewMode>('directory');
   const [sourceMode, setSourceMode] = useState<SourceMode>('all');
   const [scope, setScope] = useState<TimeScope>('all');
   const [query, setQuery] = useState('');
@@ -76,7 +76,7 @@ export default function Home() {
       const nextView = params.get('view');
       const nextMode = params.get('mode');
       const nextScope = params.get('scope');
-      setView(nextView === 'calendar' ? 'calendar' : 'list');
+      setView(nextView === 'calendar' || nextView === 'list' ? nextView : 'directory');
       setSourceMode(sourceModes.includes(nextMode as SourceMode) ? nextMode as SourceMode : 'all');
       setScope(nextScope === 'week' || nextScope === 'month' ? nextScope : 'all');
       setQuery(params.get('q') ?? '');
@@ -109,7 +109,7 @@ export default function Home() {
     if (sourceMode !== 'all') params.set('mode', sourceMode);
     if (selectedId) params.set('id', selectedId);
     if (view === 'calendar') params.set('cal', dateKey(calendarCursor).slice(0, 7));
-    if (view !== 'list') params.set('view', view);
+    if (view !== 'directory') params.set('view', view);
     if (scope !== 'all') params.set('scope', scope);
     if (query) params.set('q', query);
     if (tiers.length) params.set('tiers', tiers.join(','));
@@ -160,9 +160,17 @@ export default function Home() {
     }).sort((a, b) => sortPrograms(a, b, now));
   }, [modeRows, now, scope, query, tiers, directions, provinces, degrees, codes, statuses, verifications]);
 
+  const visibleDirectory = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return universityDirectory.filter(school => {
+      const queryMatch = !needle || [school.school, school.province, ...school.units.flatMap(unit => [unit.institute, unit.note, ...unit.codes])].join(' ').toLowerCase().includes(needle);
+      const codeMatch = !codes.length || school.units.some(unit => codes.some(code => unit.codes.includes(code)));
+      return queryMatch && codeMatch && (!tiers.length || tiers.includes(school.tier)) && (!provinces.length || provinces.includes(school.province));
+    });
+  }, [query, tiers, provinces, codes]);
+
   const selected = programs.find((program) => program.id === selectedId) ?? null;
   const activeFilterCount = tiers.length + directions.length + provinces.length + degrees.length + codes.length + statuses.length + verifications.length;
-  const modeCounts = useMemo(() => ({ all: programs.length }), []);
   const scopeCounts = useMemo(() => ({ week: countInDays(modeRows, now, 7), month: countInDays(modeRows, now, 30), all: modeRows.length }), [modeRows, now]);
 
   const clearFilters = () => { setQuery(''); setTiers([]); setDirections([]); setProvinces([]); setDegrees([]); setCodes([]); setStatuses([]); setVerifications([]); setScope('all'); };
@@ -192,33 +200,33 @@ export default function Home() {
       <div className="mx-auto flex h-16 max-w-[1500px] items-center gap-3 px-4 md:px-7">
         <div className="flex min-w-0 items-center gap-2.5"><div className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground shadow-sm"><BrainCircuit className="size-5" /></div><div className="min-w-0"><p className="truncate text-[15px] font-bold tracking-tight">心理学保研 DDL</p><p className="hidden text-[11px] text-muted-foreground sm:block">按学校 · 学院 · 官方通知整理</p></div></div>
         <div className="ml-auto flex items-center gap-1.5">
-          <NativeSelect aria-label="招生批次" value={sourceMode} onChange={e => setSourceMode(e.target.value as SourceMode)}>{sourceModes.map(mode => <NativeSelectOption key={mode} value={mode}>{mode === 'all' ? sourceLabels.pre2027 : `2027 届 · ${mode}`}</NativeSelectOption>)}</NativeSelect>
-          <div className="hidden rounded-lg border bg-muted/45 p-0.5 sm:flex" aria-label="视图切换"><Button size="sm" variant={view === 'list' ? 'secondary' : 'ghost'} onClick={() => setView('list')} aria-pressed={view === 'list'}><List />列表</Button><Button size="sm" variant={view === 'calendar' ? 'secondary' : 'ghost'} onClick={() => setView('calendar')} aria-pressed={view === 'calendar'}><CalendarDays />日历</Button></div>
+          {view !== 'directory' && <NativeSelect aria-label="招生批次" value={sourceMode} onChange={e => setSourceMode(e.target.value as SourceMode)}>{sourceModes.map(mode => <NativeSelectOption key={mode} value={mode}>{mode === 'all' ? sourceLabels.pre2027 : `2027 届 · ${mode}`}</NativeSelectOption>)}</NativeSelect>}
+          <div className="hidden rounded-lg border bg-muted/45 p-0.5 sm:flex" aria-label="视图切换"><Button size="sm" variant={view === 'directory' ? 'secondary' : 'ghost'} onClick={() => setView('directory')} aria-pressed={view === 'directory'}><University />院校专业</Button><Button size="sm" variant={view === 'list' ? 'secondary' : 'ghost'} onClick={() => setView('list')} aria-pressed={view === 'list'}><List />通知</Button><Button size="sm" variant={view === 'calendar' ? 'secondary' : 'ghost'} onClick={() => setView('calendar')} aria-pressed={view === 'calendar'}><CalendarDays />日历</Button></div>
           <Button size="icon" variant="ghost" onClick={() => setHelpOpen(true)} aria-label="键盘快捷键"><CircleHelp /></Button><Button size="icon" variant="ghost" onClick={toggleTheme} aria-label={dark ? '切换浅色主题' : '切换深色主题'}>{dark ? <Sun /> : <Moon />}</Button>
         </div>
       </div>
     </header>
 
     <section className="border-b bg-card"><div className="mx-auto flex max-w-[1500px] items-center gap-2 overflow-x-auto px-4 py-3 md:px-7">
-      <Button size="sm" className="rounded-full px-3" aria-pressed="true">官方通知 <span className="text-primary-foreground/70">{modeCounts.all}</span></Button>
-      <div className="ml-auto flex shrink-0 items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="size-3.5 text-emerald-600" />学院/研究院优先 · 学校研招补充</div>
+      <Button size="sm" className="rounded-full px-3" aria-pressed="true">985/211 核查对象 <span className="text-primary-foreground/70">{coverageSummary.total}</span></Button>
+      <div className="ml-auto flex shrink-0 items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="size-3.5 text-emerald-600" />院校全量展示 · 招生单位按院级拆分</div>
     </div></section>
 
     <div className="mx-auto grid max-w-[1500px] grid-cols-1 md:grid-cols-[238px_minmax(0,1fr)]">
       <aside className="hidden min-h-[calc(100vh-117px)] border-r px-5 py-6 md:block">{filterPanel}</aside>
       <section className="min-w-0 px-4 py-5 md:px-7 md:py-6">
-        <CoverageNotice />
+        {view !== 'directory' && <CoverageNotice />}
         <div className="flex items-center gap-2"><div className="relative max-w-2xl flex-1"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input ref={searchRef} value={query} onChange={(event) => setQuery(event.target.value)} className="h-10 rounded-xl bg-card pl-9 shadow-xs" placeholder="搜索学校、学院、通知、专业方向…" aria-label="搜索学校、学院或通知" /><kbd className="absolute right-3 top-1/2 hidden -translate-y-1/2 rounded border bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground sm:block">/</kbd></div><Button variant="outline" className="h-10 md:hidden" onClick={() => setMobileFilters(true)}><SlidersHorizontal />筛选{activeFilterCount > 0 && <Badge className="ml-0.5 size-5 px-0">{activeFilterCount}</Badge>}</Button></div>
-        <div className="mt-3 grid grid-cols-2 rounded-xl border bg-card p-1 sm:hidden"><Button size="sm" variant={view === 'list' ? 'secondary' : 'ghost'} onClick={() => setView('list')}><List />列表</Button><Button size="sm" variant={view === 'calendar' ? 'secondary' : 'ghost'} onClick={() => setView('calendar')}><CalendarDays />日历</Button></div>
+        <div className="mt-3 grid grid-cols-3 rounded-xl border bg-card p-1 sm:hidden"><Button size="sm" variant={view === 'directory' ? 'secondary' : 'ghost'} onClick={() => setView('directory')}><University />院校</Button><Button size="sm" variant={view === 'list' ? 'secondary' : 'ghost'} onClick={() => setView('list')}><List />通知</Button><Button size="sm" variant={view === 'calendar' ? 'secondary' : 'ghost'} onClick={() => setView('calendar')}><CalendarDays />日历</Button></div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-2"><span className="mr-1 text-xs font-medium text-muted-foreground">截止范围</span>{([['week', '未来7天'], ['month', '未来30天'], ['all', '全部']] as [TimeScope, string][]).map(([value, label]) => <Button key={value} size="xs" variant={scope === value ? 'secondary' : 'outline'} className="rounded-full" onClick={() => setScope(value)}>{label} {scopeCounts[value]}</Button>)}<span className="ml-auto text-xs text-muted-foreground">显示 {visibleRows.length} / {modeRows.length}</span></div>
+        {view !== 'directory' ? <div className="mt-4 flex flex-wrap items-center gap-2"><span className="mr-1 text-xs font-medium text-muted-foreground">截止范围</span>{([['week', '未来7天'], ['month', '未来30天'], ['all', '全部']] as [TimeScope, string][]).map(([value, label]) => <Button key={value} size="xs" variant={scope === value ? 'secondary' : 'outline'} className="rounded-full" onClick={() => setScope(value)}>{label} {scopeCounts[value]}</Button>)}<span className="ml-auto text-xs text-muted-foreground">显示 {visibleRows.length} / {modeRows.length}</span></div> : <div className="mt-4 flex flex-wrap gap-2 text-xs"><Badge variant="outline">全部核查对象 {coverageSummary.total}</Badge><Badge variant="outline">已有 2027 记录 {coverageSummary.withRecords}</Badge><span className="ml-auto text-muted-foreground">当前显示 {visibleDirectory.length} 所</span></div>}
 
         {(chips.length > 0 || query) && <div className="mt-3 flex flex-wrap items-center gap-1.5 rounded-xl border bg-card px-3 py-2"><span className="mr-1 text-xs text-muted-foreground">已选</span>{query && <button className="filter-chip" onClick={() => setQuery('')}>关键词：{query}<X /></button>}{chips.map((chip) => <button key={`${chip.kind}-${chip.value}`} className="filter-chip" onClick={() => removeChip(chip.kind, chip.value)}>{chip.label}<X /></button>)}<button className="ml-auto text-xs text-primary hover:underline" onClick={clearFilters}>清除全部</button></div>}
 
-        <div className="mt-6"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Official notice collection</p><h1 className="mt-1 text-2xl font-bold tracking-tight">{view === 'calendar' ? formatMonth(calendarCursor) : '心理学推免官方通知'}</h1><p className="mt-1 text-sm text-muted-foreground">以学院、学部或研究院为单位；校级通知仅作线索，不代表学院报名要求已核实。所有时间按北京时间展示。</p></div>
+        <div className="mt-6"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{view === 'directory' ? 'University & college directory' : 'Official notice collection'}</p><h1 className="mt-1 text-2xl font-bold tracking-tight">{view === 'directory' ? '985/211 心理学专业院级目录' : view === 'calendar' ? formatMonth(calendarCursor) : '心理学推免官方通知'}</h1><p className="mt-1 text-sm text-muted-foreground">{view === 'directory' ? '116 所学校全部呈现；有多个招生学院时分别列出。待核验表示尚未完成当年目录核对，不表示该校没有心理学专业。' : '以学院、学部或研究院为单位；校级通知仅作线索，不代表学院报名要求已核实。所有时间按北京时间展示。'}</p></div>
 
-        {view === 'list' ? <ProgramList rows={visibleRows} now={now} selectedId={selectedId} onSelect={setSelectedId} /> : <CalendarView rows={visibleRows} now={now} cursor={calendarCursor} onCursor={setCalendarCursor} onSelect={setSelectedId} />}
-        <div className="mt-5 flex gap-2 rounded-xl border border-dashed bg-muted/35 px-4 py-3 text-xs leading-5 text-muted-foreground"><Info className="mt-0.5 size-4 shrink-0" /><p><strong className="text-foreground">收录规则：</strong>优先收录能定位到具体学院、学部或研究院官网的 2027 通知；若相关培养单位已核实而学院尚未单独发文，则补充学校研招网公告并标注“学校通知”。招生目录、往年通知和无法核验的培养单位均不展示；未写截止时刻的通知只显示“截止未公布”。</p></div>
+        {view === 'directory' ? <UniversityDirectory rows={visibleDirectory} /> : view === 'list' ? <ProgramList rows={visibleRows} now={now} selectedId={selectedId} onSelect={setSelectedId} /> : <CalendarView rows={visibleRows} now={now} cursor={calendarCursor} onCursor={setCalendarCursor} onSelect={setSelectedId} />}
+        <div className="mt-5 flex gap-2 rounded-xl border border-dashed bg-muted/35 px-4 py-3 text-xs leading-5 text-muted-foreground"><Info className="mt-0.5 size-4 shrink-0" /><p><strong className="text-foreground">数据规则：</strong>{view === 'directory' ? '院校底表与通知分开维护。官方目录或历史来源只用于确认招生单位线索，不冒充 2027 通知；尚无学院记录的学校继续显示为“逐校核验中”。' : '通知必须链接到学院、学部、研究院或学校研招网原文；未写截止时刻的通知只显示“截止未公布”。招生目录线索请在“院校专业”视图查看。'}</p></div>
       </section>
     </div>
 
@@ -310,6 +318,14 @@ function CoverageNotice() {
     <ul className="mt-3 space-y-2">{collegeCandidates.map(unit => <li key={`${unit.school}-${unit.institute}`}><a className="underline" href={unit.source} target="_blank" rel="noreferrer">{unit.school} · {unit.institute}</a>：{unit.note}</li>)}</ul>
     <div className="mt-3 max-h-72 overflow-auto"><table className="w-full text-left text-sm"><caption className="sr-only">985、211院校核验进度</caption><thead><tr><th>院校</th><th>已记录的单位</th><th>仍需核验</th></tr></thead><tbody>{universityCoverage.map(s => <tr key={s.school} className="border-t border-amber-200 dark:border-amber-900"><td className="py-2 pr-3">{s.school}</td><td className="py-2 pr-3">{s.institutes.join('；') || '尚无记录'}</td><td className="py-2">{s.summerOnly ? '仅有夏令营；预推免待核验' : s.schoolNotices && !s.collegeNotices ? '学院通知及全校专业目录' : '全校各学院及附件专业目录'}</td></tr>)}</tbody></table></div>
   </details>;
+}
+
+function UniversityDirectory({ rows }: { rows: typeof universityDirectory }) {
+  if (!rows.length) return <EmptyState />;
+  return <div className="mt-4 overflow-hidden rounded-2xl border bg-card">{rows.map(school => <article key={school.school} className="grid gap-3 border-b p-4 last:border-0 lg:grid-cols-[220px_1fr]">
+    <div><div className="flex items-center gap-2"><div className="grid size-9 shrink-0 place-items-center rounded-xl border bg-background font-black text-primary">{schoolMark(school.school)}</div><div><h2 className="font-bold">{school.school}</h2><p className="text-xs text-muted-foreground">{school.tier} · {school.province}</p></div></div></div>
+    <div className="space-y-2">{school.units.length ? school.units.map(unit => <div key={unit.institute} className="rounded-xl border bg-background/60 p-3"><div className="flex flex-wrap items-center gap-2"><h3 className="text-sm font-semibold">{unit.institute}</h3><Badge variant="outline" className={unit.status === 'current_notice' ? verificationMeta.college_notice.tone : 'text-amber-700 border-amber-200 bg-amber-50 dark:text-amber-300 dark:border-amber-900 dark:bg-amber-950/40'}>{unit.status === 'current_notice' ? '已有 2027 记录' : '官方来源线索'}</Badge>{unit.codes.map(code => <span key={code} className="mini-tag">{code}</span>)}<a href={unit.source} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center gap-1 text-xs text-primary hover:underline">查看来源<ExternalLink className="size-3" /></a></div><p className="mt-1.5 text-xs leading-5 text-muted-foreground">{unit.note}</p></div>) : <div className="rounded-xl border border-dashed bg-muted/25 px-3 py-3"><p className="text-sm font-medium text-amber-700 dark:text-amber-300">逐校目录核验中</p><p className="mt-1 text-xs text-muted-foreground">尚未确认附件目标代码对应的招生学院；该状态不能用于判断学校没有心理学专业。</p></div>}</div>
+  </article>)}</div>;
 }
 function DetailSection({ title, children }: { title: string; children: ReactNode }) { return <section><h3 className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">{title}</h3>{children}</section>; }
 function DetailRow({ label, value, icon }: { label: string; value: string; icon?: ReactNode }) { return <div className="grid grid-cols-[96px_1fr] border-b py-2.5 text-sm last:border-0"><span className="flex items-center gap-1.5 text-muted-foreground">{icon && <span className="[&>svg]:size-3.5">{icon}</span>}{label}</span><span>{value}</span></div>; }
